@@ -1,0 +1,8 @@
+api:
+  port: 5050
+
+mongodb:
+  host: localhost
+  port: 27017
+  user: admin
+  password:

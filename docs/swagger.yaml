@@ -1,0 +1,12 @@
+basePath: /
+host: localhost:3002
+info:
+  contact:
+    name: API Support
+  description: This is a sample server Petstore server.
+  license:
+    name: Apache 2.0
+  title: GoPress
+  version: "1.0"
+paths: {}
+swagger: "2.0"

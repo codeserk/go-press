@@ -1,6 +1,6 @@
 package scene
 
-import "press/schema"
+import "press/core/schema"
 
 type Entity struct {
 	ID   string
