@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"press/core/http/middleware"
 	userModule "press/core/user/module"
 	"press/mongo"
 
@@ -39,6 +40,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("There was an error found while connect to mongodb: %v", err)
 	}
+
+	router.Use(middleware.CorsMiddleware)
 
 	userModule.Bootstrap(client, router)
 

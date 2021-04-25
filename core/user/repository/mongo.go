@@ -36,8 +36,11 @@ func (r *Mongo) CreateOne(params CreateOneParams) (*user.Entity, error) {
 	if err != nil {
 		return nil, errors.New("Error found while trying to insert a new user: " + err.Error())
 	}
-
-	return r.FindOneById(result.InsertedID.(string))
+	if objectId, ok := result.InsertedID.(primitive.ObjectID); ok {
+		return r.FindOneById(objectId.Hex())
+	} else {
+		return nil, fmt.Errorf("Error found while trying to convert the InsertedID into an ObjectID")
+	}
 }
 
 // Tries to find a user by its id.
@@ -63,6 +66,9 @@ func (r *Mongo) FindOneByEmail(email string) (*user.Entity, error) {
 	var foundUser user.Entity
 	err := mongo.Users.FindOne(ctx, query).Decode(&foundUser)
 	if err != nil {
+		if err == mongodb.ErrNoDocuments {
+			return nil, nil
+		}
 		return nil, fmt.Errorf("Error found while tryign to retrieve the user by its email '%s': %v", email, err)
 	}
 

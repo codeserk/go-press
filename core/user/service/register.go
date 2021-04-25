@@ -7,6 +7,7 @@ import (
 	"press/core/user/repository"
 )
 
+// Registers a new user with the given params
 func (s *service) Register(params RegisterParams) (*user.Entity, error) {
 	// Tries to find the user by the email
 	userWithEmail, err := s.repository.FindOneByEmail(params.Email)

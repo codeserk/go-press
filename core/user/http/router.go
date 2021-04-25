@@ -7,5 +7,5 @@ import (
 )
 
 func MakeHandlers(router *mux.Router, userService service.Interface) {
-	router.Handle("/v1/auth/register", register(userService)).Methods("POST")
+	router.Handle("/v1/auth/register", register(userService)).Methods("POST", "OPTIONS")
 }
