@@ -1,5 +1,15 @@
 basePath: /
-host: localhost:3002
+definitions:
+  RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    type: object
+host: localhost:5050
 info:
   contact:
     name: API Support
@@ -8,5 +18,23 @@ info:
     name: Apache 2.0
   title: GoPress
   version: "1.0"
-paths: {}
+paths:
+  /v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user with email and password
+      operationId: register-user
+      parameters:
+      - description: User registration parameters
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Registers a new user with email and password
 swagger: "2.0"

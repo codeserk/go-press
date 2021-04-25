@@ -11,7 +11,52 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:3002",
+    "host": "localhost:5050",
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/v1/auth/register": {
+            "post": {
+                "description": "Registers a new user with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Registers a new user with email and password",
+                "operationId": "register-user",
+                "parameters": [
+                    {
+                        "description": "User registration parameters",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }

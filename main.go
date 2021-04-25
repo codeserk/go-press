@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -10,14 +9,12 @@ import (
 
 	"github.com/gorilla/mux"
 
+	userModule "press/core/user/module"
+	"press/mongo"
+
 	"press/config"
 	_ "press/docs"
 )
-
-func homePage(w http.ResponseWriter, r *http.Request) {
-	log.Print("Request at home")
-	json.NewEncoder(w).Encode("hello")
-}
 
 // @title GoPress
 // @version 1.0
@@ -26,7 +23,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 // @contact.name API Support
 // @license.name Apache 2.0
 
-// @host localhost:3002
+// @host localhost:5050
 // @BasePath /
 func main() {
 	log.SetPrefix("[GoPress] ")
@@ -35,8 +32,15 @@ func main() {
 
 	conf, err := config.Parse()
 	if err != nil {
-		log.Fatalf("There was an error found while trying to load the configuration: \n%s \n", err.Error())
+		log.Fatalf("There was an error found while trying to load the configuration: %v", err)
 	}
+
+	client, err := mongo.Connect(conf.MongoDB.Host)
+	if err != nil {
+		log.Fatalf("There was an error found while connect to mongodb: %v", err)
+	}
+
+	userModule.Bootstrap(client, router)
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.DeepLinking(true),

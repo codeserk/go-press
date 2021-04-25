@@ -4,12 +4,14 @@ import (
 	"context"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var Schemas *mongo.Collection
 var Scenes *mongo.Collection
+var Users *mongo.Collection
 
 func Connect(connectionUrl string) (*mongo.Client, error) {
 	context, cancel := CreateContext()
@@ -28,8 +30,20 @@ func Connect(connectionUrl string) (*mongo.Client, error) {
 	// Init collections
 	Schemas = client.Database("press").Collection("schemas")
 	Scenes = client.Database("press").Collection("scenes")
+	createUsersSchema(client)
 
 	return client, nil
+}
+
+func createUsersSchema(client *mongo.Client) {
+	ctx, cancel := CreateContext()
+	defer cancel()
+
+	Users = client.Database("press").Collection("users")
+	Users.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys:    bson.D{{Key: "email", Value: 1}},
+		Options: options.Index().SetUnique(true),
+	})
 }
 
 func CreateContext() (context.Context, context.CancelFunc) {
