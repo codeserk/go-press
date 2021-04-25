@@ -7,6 +7,12 @@ type RegisterParams struct {
 	Password string
 }
 
+type LoginParams struct {
+	Email    string
+	Password string
+}
+
 type Interface interface {
 	Register(params RegisterParams) (*user.Entity, error)
+	Login(params LoginParams) (*user.Entity, error)
 }

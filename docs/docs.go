@@ -29,6 +29,34 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/auth/login": {
+            "post": {
+                "description": "Tries to login using some credentials.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Tries to login using some credentials.",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "description": "User login with email and password",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/v1/auth/register": {
             "post": {
                 "description": "Registers a new user with email and password",
@@ -59,6 +87,20 @@ var doc = `{
         }
     },
     "definitions": {
+        "LoginRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "RegisterRequest": {
             "type": "object",
             "required": [

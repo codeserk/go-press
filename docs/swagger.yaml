@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    type: object
   RegisterRequest:
     properties:
       email:
@@ -19,6 +28,24 @@ info:
   title: GoPress
   version: "1.0"
 paths:
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Tries to login using some credentials.
+      operationId: login
+      parameters:
+      - description: User login with email and password
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Tries to login using some credentials.
   /v1/auth/register:
     post:
       consumes:

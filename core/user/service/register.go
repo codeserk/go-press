@@ -5,6 +5,7 @@ import (
 	"press/core/errors"
 	"press/core/user"
 	"press/core/user/repository"
+	"press/core/util"
 )
 
 // Registers a new user with the given params
@@ -18,7 +19,13 @@ func (s *service) Register(params RegisterParams) (*user.Entity, error) {
 		return nil, errors.Publicf("Email '%v' is already used", params.Email)
 	}
 
-	createdUser, err := s.repository.CreateOne(repository.CreateOneParams(params))
+	userToCreate := repository.CreateOneParams(params)
+	userToCreate.Password, err = util.HashAndSalt(userToCreate.Password)
+	if err != nil {
+		return nil, fmt.Errorf("Error while generating the hash for the password: %v", err)
+	}
+
+	createdUser, err := s.repository.CreateOne(userToCreate)
 	if err != nil {
 		return nil, fmt.Errorf("Error found while trying to create a new user: %v", err)
 	}
