@@ -4,14 +4,20 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"press/common/util"
+	"press/core/user"
 	"press/core/user/service"
-	"press/core/util"
 )
 
 type loginRequest struct {
 	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required`
+	Password string `json:"password" validate:"required"`
 } // @name LoginRequest
+
+type loginResponse struct {
+	User *user.Entity `json:"user"`
+	Jwt  string       `json:"jwt"`
+} // @name LoginResponse
 
 // @Summary Tries to login using some credentials.
 // @Description Tries to login using some credentials.
@@ -19,14 +25,15 @@ type loginRequest struct {
 // @Accept  json
 // @Produce  json
 // @Param body body loginRequest loginRequest "User login with email and password"
-// @Success 200
+// @Success 200 {object} loginResponse "User response and JWT"
+// @Security ApiKeyAuth
 // @Router /v1/auth/login [post]
 func login(userService service.Interface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var input loginRequest
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			util.ValidationError(w, errors.New("Invalid input"))
+			util.ValidationError(w, errors.New("invalid input"))
 			return
 		}
 
@@ -36,13 +43,17 @@ func login(userService service.Interface) http.Handler {
 			return
 		}
 
-		loggedUser, err := userService.Login(service.LoginParams(input))
+		loggedUser, jwt, err := userService.Login(service.LoginParams(input))
 		if err != nil {
 			util.InternalError(w, err)
 			return
 		}
+		response := loginResponse{
+			User: loggedUser,
+			Jwt:  jwt,
+		}
 
 		w.Header().Add("content-type", "application/json")
-		json.NewEncoder(w).Encode(loggedUser)
+		json.NewEncoder(w).Encode(response)
 	})
 }

@@ -4,16 +4,22 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"press/common/util"
+	"press/core/user"
 	"press/core/user/service"
-	"press/core/util"
 
 	"github.com/go-playground/validator"
 )
 
 type registerRequest struct {
 	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required`
+	Password string `json:"password" validate:"required"`
 } // @name RegisterRequest
+
+type registerResponse struct {
+	User *user.Entity `json:"user"`
+	Jwt  string       `json:"jwt"`
+} // @name RegisterResponse
 
 var validate *validator.Validate = validator.New()
 
@@ -31,7 +37,7 @@ func register(userService service.Interface) http.Handler {
 		var input registerRequest
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			util.ValidationError(w, errors.New("Invalid input"))
+			util.ValidationError(w, errors.New("invalid input"))
 			return
 		}
 
@@ -41,13 +47,17 @@ func register(userService service.Interface) http.Handler {
 			return
 		}
 
-		createdUser, err := userService.Register(service.RegisterParams(input))
+		createdUser, jwt, err := userService.Register(service.RegisterParams(input))
 		if err != nil {
 			util.InternalError(w, err)
 			return
 		}
+		response := registerResponse{
+			User: createdUser,
+			Jwt:  jwt,
+		}
 
 		w.Header().Add("content-type", "application/json")
-		json.NewEncoder(w).Encode(createdUser)
+		json.NewEncoder(w).Encode(response)
 	})
 }

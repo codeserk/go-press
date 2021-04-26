@@ -6,3 +6,6 @@ mongodb:
   port: 27017
   user: admin
   password:
+
+jwt:
+  secret: jwt-secret

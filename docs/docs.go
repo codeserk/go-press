@@ -31,6 +31,11 @@ var doc = `{
     "paths": {
         "/v1/auth/login": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Tries to login using some credentials.",
                 "consumes": [
                     "application/json"
@@ -52,7 +57,10 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "User response and JWT",
+                        "schema": {
+                            "$ref": "#/definitions/LoginResponse"
+                        }
                     }
                 }
             }
@@ -90,7 +98,8 @@ var doc = `{
         "LoginRequest": {
             "type": "object",
             "required": [
-                "email"
+                "email",
+                "password"
             ],
             "properties": {
                 "email": {
@@ -101,10 +110,22 @@ var doc = `{
                 }
             }
         },
+        "LoginResponse": {
+            "type": "object",
+            "properties": {
+                "jwt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/user.Entity"
+                }
+            }
+        },
         "RegisterRequest": {
             "type": "object",
             "required": [
-                "email"
+                "email",
+                "password"
             ],
             "properties": {
                 "email": {
@@ -114,6 +135,24 @@ var doc = `{
                     "type": "string"
                 }
             }
+        },
+        "user.Entity": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

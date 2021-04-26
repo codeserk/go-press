@@ -48,6 +48,9 @@ func Parse() (*Config, error) {
 	if err := validateAPIConfig(&config); err != nil {
 		return nil, err
 	}
+	if err := validateJWTConfig(&config); err != nil {
+		return nil, err
+	}
 
 	return &config, nil
 }
@@ -61,9 +64,18 @@ func validateAPIConfig(config *Config) error {
 	return nil
 }
 
+// validateJWTConfig Validates the JWT configuration
+func validateJWTConfig(config *Config) error {
+	if len(config.JWT.Secret) == 0 {
+		return composeError("jwt.secret", config.JWT.Secret)
+	}
+
+	return nil
+}
+
 // composeError Composes the error found for a config key
 func composeError(key string, value interface{}) error {
-	return fmt.Errorf(`Invalid config value "%v" for key "%s". Please check the configuration files.`, value, key)
+	return fmt.Errorf(`invalid config value "%v" for key "%s". please check the configuration files`, value, key)
 }
 
 // getConfigFile Gets the config file for the current environment.
@@ -79,11 +91,11 @@ Valid environments: "development", "staging", "production".`,
 	pflag.Parse()
 
 	if result == nil || *result == "" {
-		return "", fmt.Errorf("Environment not found, check the command usage.")
+		return "", fmt.Errorf("environment not found, check the command usage")
 	}
 	if config, exists := environmentConfigFile[*result]; exists {
 		return config, nil
 	}
 
-	return "", fmt.Errorf("Environment \"" + *result + "\" is invalid, check the command usage.")
+	return "", fmt.Errorf("environment \"" + *result + "\" is invalid, check the command usage")
 }

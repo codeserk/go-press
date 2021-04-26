@@ -8,6 +8,14 @@ definitions:
         type: string
     required:
     - email
+    - password
+    type: object
+  LoginResponse:
+    properties:
+      jwt:
+        type: string
+      user:
+        $ref: '#/definitions/user.Entity'
     type: object
   RegisterRequest:
     properties:
@@ -17,6 +25,14 @@ definitions:
         type: string
     required:
     - email
+    - password
+    type: object
+  user.Entity:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
     type: object
 host: localhost:5050
 info:
@@ -44,7 +60,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: User response and JWT
+          schema:
+            $ref: '#/definitions/LoginResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Tries to login using some credentials.
   /v1/auth/register:
     post:
@@ -64,4 +84,9 @@ paths:
         "200":
           description: ""
       summary: Registers a new user with email and password
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

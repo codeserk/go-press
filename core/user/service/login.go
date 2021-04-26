@@ -9,20 +9,26 @@ import (
 )
 
 // Logins with the credentials
-func (s *service) Login(params LoginParams) (*user.Entity, error) {
+func (s *service) Login(params LoginParams) (*user.Entity, string, error) {
 	userWithEmail, err := s.repository.FindOneByEmail(params.Email)
 	if err != nil {
-		return nil, fmt.Errorf("Error found while trying to get user by email: %v", err)
+		return nil, "", fmt.Errorf("error found while trying to get user by email: %v", err)
 	}
 	if userWithEmail == nil {
-		return nil, errors.Public("Invalid credentials")
+		return nil, "", errors.Public("invalid credentials")
 	}
 
 	// Compare passwords
 	err = bcrypt.CompareHashAndPassword([]byte(userWithEmail.Password), []byte(params.Password))
 	if err != nil {
-		return nil, errors.Public("Invalid credentials")
+		return nil, "", errors.Public("invalid credentials")
 	}
 
-	return userWithEmail, nil
+	// Generate token
+	token, err := s.jwt.GenerateFromUserID(userWithEmail.ID.Hex())
+	if err != nil {
+		return nil, "", fmt.Errorf("error found while generating JWT from user id: %v", err)
+	}
+
+	return userWithEmail, token, nil
 }

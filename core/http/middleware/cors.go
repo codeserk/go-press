@@ -9,8 +9,8 @@ func CorsMiddleware(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Headers", "*")
 		if r.Method == "OPTIONS" {
 			return
-		} else {
-			next.ServeHTTP(w, r)
 		}
+
+		next.ServeHTTP(w, r)
 	})
 }
