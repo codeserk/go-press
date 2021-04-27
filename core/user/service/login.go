@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"press/core/errors"
+	"press/common/errors"
 	"press/core/user"
 
 	"golang.org/x/crypto/bcrypt"

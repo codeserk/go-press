@@ -3,7 +3,7 @@ package util
 import (
 	"encoding/json"
 	"net/http"
-	"press/core/errors"
+	"press/common/errors"
 )
 
 type HttpError struct {

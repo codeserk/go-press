@@ -5,8 +5,9 @@ services:
     image: mongo:latest
     volumes:
       - ./.data/db:/data/db
+    command: mongod --port 27019
     ports:
-        - 27017:27017
+        - 27019:27019
   redis:
     image: redis
     ports:
