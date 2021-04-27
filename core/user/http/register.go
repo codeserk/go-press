@@ -23,6 +23,7 @@ type registerResponse struct {
 
 var validate *validator.Validate = validator.New()
 
+// @Tags Auth
 // Registers a new user with email and password
 // @Summary Registers a new user with email and password
 // @Description Registers a new user with email and password
@@ -30,7 +31,9 @@ var validate *validator.Validate = validator.New()
 // @Accept  json
 // @Produce  json
 // @Param body body registerRequest registerRequest "User registration parameters"
-// @Success 200
+// @Success 200 {object} registerResponse "User response and JWT"
+// @Failure 400 {object} util.HttpError
+// @Failure 500 {object} util.HttpError
 // @Router /v1/auth/register [post]
 func register(userService service.Interface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

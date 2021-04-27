@@ -28,6 +28,10 @@ func InternalError(w http.ResponseWriter, err error) {
 	SendError(w, http.StatusInternalServerError, err, "Internal Error")
 }
 
+func UnauthorizedError(w http.ResponseWriter) {
+	SendError(w, http.StatusUnauthorized, errors.New("Not authorized"), "Not authorized")
+}
+
 func ValidationError(w http.ResponseWriter, err error) {
 	SendError(w, http.StatusUnprocessableEntity, err, "Validation Error")
 }

@@ -19,6 +19,7 @@ type loginResponse struct {
 	Jwt  string       `json:"jwt"`
 } // @name LoginResponse
 
+// @Tags Auth
 // @Summary Tries to login using some credentials.
 // @Description Tries to login using some credentials.
 // @ID login
@@ -26,7 +27,8 @@ type loginResponse struct {
 // @Produce  json
 // @Param body body loginRequest loginRequest "User login with email and password"
 // @Success 200 {object} loginResponse "User response and JWT"
-// @Security ApiKeyAuth
+// @Failure 400 {object} util.HttpError
+// @Failure 500 {object} util.HttpError
 // @Router /v1/auth/login [post]
 func login(userService service.Interface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

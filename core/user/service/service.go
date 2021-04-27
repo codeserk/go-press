@@ -26,6 +26,8 @@ type Interface interface {
 	Login(params LoginParams) (*user.Entity, string, error)
 
 	CreateAuthMiddleware(next http.Handler) (http.Handler)
+
+	GenerateJWTForUser(user *user.Entity) (string ,error)
 }
 
 

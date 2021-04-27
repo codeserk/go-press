@@ -17,6 +17,13 @@ definitions:
       user:
         $ref: '#/definitions/user.Entity'
     type: object
+  MeResponse:
+    properties:
+      jwt:
+        type: string
+      user:
+        $ref: '#/definitions/user.Entity'
+    type: object
   RegisterRequest:
     properties:
       email:
@@ -27,11 +34,25 @@ definitions:
     - email
     - password
     type: object
+  RegisterResponse:
+    properties:
+      jwt:
+        type: string
+      user:
+        $ref: '#/definitions/user.Entity'
+    type: object
   user.Entity:
     properties:
       email:
         type: string
       id:
+        type: string
+    type: object
+  util.HttpError:
+    properties:
+      code:
+        type: string
+      message:
         type: string
     type: object
 host: localhost:5050
@@ -63,9 +84,17 @@ paths:
           description: User response and JWT
           schema:
             $ref: '#/definitions/LoginResponse'
-      security:
-      - ApiKeyAuth: []
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HttpError'
       summary: Tries to login using some credentials.
+      tags:
+      - Auth
   /v1/auth/register:
     post:
       consumes:
@@ -82,8 +111,46 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: User response and JWT
+          schema:
+            $ref: '#/definitions/RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HttpError'
       summary: Registers a new user with email and password
+      tags:
+      - Auth
+  /v1/user/me:
+    get:
+      consumes:
+      - application/json
+      description: Gets the current user and JWT
+      operationId: me
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User and JWT
+          schema:
+            $ref: '#/definitions/MeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HttpError'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets the current user and JWT
+      tags:
+      - User
 securityDefinitions:
   ApiKeyAuth:
     in: header
