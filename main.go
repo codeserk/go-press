@@ -11,6 +11,7 @@ import (
 
 	"press/common/jwt"
 	"press/core/http/middleware"
+	realmModule "press/core/realm/module"
 	userModule "press/core/user/module"
 	"press/mongo"
 
@@ -21,7 +22,6 @@ import (
 // @title GoPress
 // @version 1.0
 // @description This is a sample server Petstore server.
-
 // @contact.name API Support
 // @license.name Apache 2.0
 // @securityDefinitions.apikey ApiKeyAuth
@@ -29,6 +29,7 @@ import (
 // @name Authorization
 // @host localhost:5050
 // @BasePath /
+// main Main function.
 func main() {
 	log.SetPrefix("[GoPress] ")
 
@@ -47,10 +48,10 @@ func main() {
 	jwtService := jwt.New(conf)
 
 	router.Use(middleware.CorsMiddleware)
-	// router.Use(middleware.AuthMiddleware)
 
-	userService := userModule.Bootstrap(client, jwtService ,router)
+	userService := userModule.Bootstrap(client, jwtService, router)
 	router.Use(userService.CreateAuthMiddleware)
+	realmModule.Bootstrap(client, router)
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.DeepLinking(true),
@@ -60,6 +61,6 @@ func main() {
 
 	http.Handle("/", router)
 
-	log.Printf("server started at http://localhost:%v/swagger/", conf.Api.Port)
-	log.Fatal(http.ListenAndServe("localhost:"+strconv.Itoa(conf.Api.Port), nil))
+	log.Printf("server started at http://localhost:%v/swagger/", conf.API.Port)
+	log.Fatal(http.ListenAndServe("localhost:"+strconv.Itoa(conf.API.Port), nil))
 }

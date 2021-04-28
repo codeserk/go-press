@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"press/core/user"
 	"press/mongo"
 
@@ -18,7 +19,7 @@ type Mongo struct {
 	client *mongodb.Client
 }
 
-func Create(client *mongodb.Client) Interface {
+func New(client *mongodb.Client) Interface {
 	return &Mongo{client: client}
 }
 
@@ -34,26 +35,26 @@ func (r *Mongo) CreateOne(params CreateOneParams) (*user.Entity, error) {
 	query := CreateOneQuery(params)
 	result, err := mongo.Users.InsertOne(ctx, query)
 	if err != nil {
-		return nil, errors.New("Error found while trying to insert a new user: " + err.Error())
+		return nil, errors.New("error found while trying to insert a new user: " + err.Error())
 	}
-	if objectId, ok := result.InsertedID.(primitive.ObjectID); ok {
-		return r.FindOneById(objectId.Hex())
-	} else {
-		return nil, fmt.Errorf("Error found while trying to convert the InsertedID into an ObjectID")
+	if objectID, ok := result.InsertedID.(primitive.ObjectID); ok {
+		return r.FindOneByID(objectID.Hex())
 	}
+
+	return nil, fmt.Errorf("error found while trying to convert the InsertedID into an ObjectID")
 }
 
 // Tries to find a user by its id.
-func (r *Mongo) FindOneById(id string) (*user.Entity, error) {
-	objectId, err := primitive.ObjectIDFromHex(id)
+func (r *Mongo) FindOneByID(id string) (*user.Entity, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return nil, fmt.Errorf("Error found while trying to convert ObjectId '%s': %v", id, err)
+		return nil, fmt.Errorf("error found while trying to convert ObjectId '%s': %v", id, err)
 	}
 
 	var createdUser user.Entity
-	err = mongo.Users.FindOne(ctx, bson.M{"_id": objectId}).Decode(&createdUser)
+	err = mongo.Users.FindOne(ctx, bson.M{"_id": objectID}).Decode(&createdUser)
 	if err != nil {
-		return nil, fmt.Errorf("Error found while tryign to retrieve the user by its id `%s`: %v", objectId, err)
+		return nil, fmt.Errorf("error found while tryign to retrieve the user by its id `%s`: %v", objectID, err)
 	}
 
 	return &createdUser, nil
@@ -69,7 +70,7 @@ func (r *Mongo) FindOneByEmail(email string) (*user.Entity, error) {
 		if err == mongodb.ErrNoDocuments {
 			return nil, nil
 		}
-		return nil, fmt.Errorf("Error found while tryign to retrieve the user by its email '%s': %v", email, err)
+		return nil, fmt.Errorf("error found while tryign to retrieve the user by its email '%s': %v", email, err)
 	}
 
 	return &foundUser, nil

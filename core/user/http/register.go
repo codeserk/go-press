@@ -32,8 +32,8 @@ var validate *validator.Validate = validator.New()
 // @Produce  json
 // @Param body body registerRequest registerRequest "User registration parameters"
 // @Success 200 {object} registerResponse "User response and JWT"
-// @Failure 400 {object} util.HttpError
-// @Failure 500 {object} util.HttpError
+// @Failure 400 {object} util.HTTPError
+// @Failure 500 {object} util.HTTPError
 // @Router /v1/auth/register [post]
 func register(userService service.Interface) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +60,6 @@ func register(userService service.Interface) http.Handler {
 			Jwt:  jwt,
 		}
 
-		w.Header().Add("content-type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		util.SendJSON(w, response)
 	})
 }

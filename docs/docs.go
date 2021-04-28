@@ -63,13 +63,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/util.HttpError"
+                            "$ref": "#/definitions/util.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/util.HttpError"
+                            "$ref": "#/definitions/util.HTTPError"
                         }
                     }
                 }
@@ -109,13 +109,97 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/util.HttpError"
+                            "$ref": "#/definitions/util.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/util.HttpError"
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/realm": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Gets all the realms accessible for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Realm"
+                ],
+                "summary": "Gets all the realms accessible for the current user",
+                "operationId": "get-realms",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new realm",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Realm"
+                ],
+                "summary": "Creates a new realm",
+                "operationId": "create-realm",
+                "parameters": [
+                    {
+                        "description": "Realm parameters",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/http.createRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
                         }
                     }
                 }
@@ -150,13 +234,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/util.HttpError"
+                            "$ref": "#/definitions/util.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/util.HttpError"
+                            "$ref": "#/definitions/util.HTTPError"
                         }
                     }
                 }
@@ -227,6 +311,17 @@ var doc = `{
                 }
             }
         },
+        "http.createRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "user.Entity": {
             "type": "object",
             "properties": {
@@ -238,7 +333,7 @@ var doc = `{
                 }
             }
         },
-        "util.HttpError": {
+        "util.HTTPError": {
             "type": "object",
             "properties": {
                 "code": {

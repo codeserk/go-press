@@ -12,17 +12,18 @@ import (
 var Schemas *mongo.Collection
 var Scenes *mongo.Collection
 var Users *mongo.Collection
+var Realms *mongo.Collection
 
-func Connect(connectionUrl string) (*mongo.Client, error) {
-	context, cancel := CreateContext()
+func Connect(connectionURL string) (*mongo.Client, error) {
+	cxt, cancel := CreateContext()
 	defer cancel()
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
-	client, err := mongo.Connect(context, clientOptions)
+	client, err := mongo.Connect(cxt, clientOptions)
 	if err != nil {
 		return nil, err
 	}
 
-	err = client.Ping(context, nil)
+	err = client.Ping(cxt, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -31,6 +32,7 @@ func Connect(connectionUrl string) (*mongo.Client, error) {
 	Schemas = client.Database("press").Collection("schemas")
 	Scenes = client.Database("press").Collection("scenes")
 	createUsersSchema(client)
+	createRealmSchema(client)
 
 	return client, nil
 }
@@ -40,12 +42,21 @@ func createUsersSchema(client *mongo.Client) {
 	defer cancel()
 
 	Users = client.Database("press").Collection("users")
-	Users.Indexes().CreateOne(ctx, mongo.IndexModel{
+	_, err := Users.Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys:    bson.D{{Key: "email", Value: 1}},
 		Options: options.Index().SetUnique(true),
 	})
+
+	if err != nil {
+		panic(err)
+	}
+}
+
+func createRealmSchema(client *mongo.Client) {
+	Realms = client.Database("press").Collection("realms")
 }
 
 func CreateContext() (context.Context, context.CancelFunc) {
-	return context.WithTimeout(context.Background(), 10*time.Second)
+	// nolint
+	return context.WithTimeout(context.Background(), 10 * time.Second)
 }

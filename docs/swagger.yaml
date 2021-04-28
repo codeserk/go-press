@@ -41,6 +41,13 @@ definitions:
       user:
         $ref: '#/definitions/user.Entity'
     type: object
+  http.createRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   user.Entity:
     properties:
       email:
@@ -48,7 +55,7 @@ definitions:
       id:
         type: string
     type: object
-  util.HttpError:
+  util.HTTPError:
     properties:
       code:
         type: string
@@ -87,11 +94,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/util.HttpError'
+            $ref: '#/definitions/util.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/util.HttpError'
+            $ref: '#/definitions/util.HTTPError'
       summary: Tries to login using some credentials.
       tags:
       - Auth
@@ -117,14 +124,67 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/util.HttpError'
+            $ref: '#/definitions/util.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/util.HttpError'
+            $ref: '#/definitions/util.HTTPError'
       summary: Registers a new user with email and password
       tags:
       - Auth
+  /v1/realm:
+    get:
+      consumes:
+      - application/json
+      description: Gets all the realms accessible for the current user
+      operationId: get-realms
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets all the realms accessible for the current user
+      tags:
+      - Realm
+    post:
+      consumes:
+      - application/json
+      description: Creates a new realm
+      operationId: create-realm
+      parameters:
+      - description: Realm parameters
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/http.createRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new realm
+      tags:
+      - Realm
   /v1/user/me:
     get:
       consumes:
@@ -141,11 +201,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/util.HttpError'
+            $ref: '#/definitions/util.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/util.HttpError'
+            $ref: '#/definitions/util.HTTPError'
       security:
       - ApiKeyAuth: []
       summary: Gets the current user and JWT

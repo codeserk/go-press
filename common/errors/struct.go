@@ -9,20 +9,19 @@ type PressError struct {
 	code string
 }
 
-var DEFAULT_ERROR_MESSAGE = "Something went wrong"
-var DEFAULT_CODE = "internal_error"
+var defaultErrorMessage = "Something went wrong"
+var defaultCode = "internal_error"
 
 func New(message string) Interface {
 	return &PressError{
 		internalMessage: message,
-		publicMessage:   DEFAULT_ERROR_MESSAGE,
-		code:            DEFAULT_CODE,
+		publicMessage:   defaultErrorMessage,
+		code:            defaultCode,
 	}
 }
 
 func Newf(format string, params ...interface{}) Interface {
-	return New(fmt.Sprintf(format, params))
-
+	return New(fmt.Sprintf(format, params...))
 }
 
 func Internal(message string) Interface {
@@ -30,19 +29,19 @@ func Internal(message string) Interface {
 }
 
 func Internalf(format string, params ...interface{}) Interface {
-	return Newf(format, params)
+	return Newf(format, params...)
 }
 
 func Public(message string) Interface {
 	return &PressError{
-		internalMessage: DEFAULT_ERROR_MESSAGE,
+		internalMessage: defaultErrorMessage,
 		publicMessage:   message,
-		code:            DEFAULT_CODE,
+		code:            defaultCode,
 	}
 }
 
 func Publicf(format string, params ...interface{}) Interface {
-	return Public(fmt.Sprintf(format, params))
+	return Public(fmt.Sprintf(format, params...))
 }
 
 func (e *PressError) Error() string {

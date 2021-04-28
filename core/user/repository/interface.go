@@ -10,6 +10,6 @@ type CreateOneParams struct {
 type Interface interface {
 	CreateOne(params CreateOneParams) (*user.Entity, error)
 
-	FindOneById(id string) (*user.Entity, error)
+	FindOneByID(id string) (*user.Entity, error)
 	FindOneByEmail(email string) (*user.Entity, error)
 }

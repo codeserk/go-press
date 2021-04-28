@@ -2,13 +2,14 @@ package service
 
 import (
 	"fmt"
+
 	"press/common/errors"
 	"press/core/user"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Logins with the credentials
+// Logins with the credentials.
 func (s *service) Login(params LoginParams) (*user.Entity, string, error) {
 	userWithEmail, err := s.repository.FindOneByEmail(params.Email)
 	if err != nil {

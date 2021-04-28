@@ -18,10 +18,9 @@ type service struct {
 	config *config.Config
 }
 
-func New(config *config.Config) Interface {
-	return &service{ config: config }
+func New(conf *config.Config) Interface {
+	return &service{config: conf}
 }
-
 
 func (s *service) GenerateFromUserID(id string) (string, error) {
 	claims := Claims{

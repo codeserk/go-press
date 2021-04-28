@@ -25,17 +25,15 @@ type Interface interface {
 	// Login Logins using email and password. Returns the logged in user and the jwt.
 	Login(params LoginParams) (*user.Entity, string, error)
 
-	CreateAuthMiddleware(next http.Handler) (http.Handler)
+	CreateAuthMiddleware(next http.Handler) http.Handler
 
-	GenerateJWTForUser(user *user.Entity) (string ,error)
+	GenerateJWTForUser(user *user.Entity) (string, error)
 }
-
-
 type service struct {
 	repository repository.Interface
-	jwt jwt.Interface
+	jwt        jwt.Interface
 }
 
-func New(repository repository.Interface, jwt jwt.Interface) Interface {
-	return &service{repository, jwt}
+func New(userRepository repository.Interface, jwtService jwt.Interface) Interface {
+	return &service{userRepository, jwtService}
 }

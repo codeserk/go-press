@@ -10,11 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func Bootstrap(mongoClient *mongo.Client, jwt jwt.Interface, router *mux.Router) service.Interface {
-	repository := repository.Create(mongoClient)
-	service := service.New(repository, jwt)
+func Bootstrap(mongoClient *mongo.Client, jwtService jwt.Interface, router *mux.Router) service.Interface {
+	userRepository := repository.New(mongoClient)
+	userService := service.New(userRepository, jwtService)
 
-	http.MakeHandlers(router, service)
+	http.MakeHandlers(router, userService)
 
-	return service
+	return userService
 }

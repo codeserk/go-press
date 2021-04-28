@@ -1,12 +1,12 @@
 package config
 
 type Config struct {
-	Api     ApiConfig
+	API     APIConfig
 	MongoDB MongoDBConfig
-	JWT 	JWTConfig
+	JWT     JWTConfig
 }
 
-type ApiConfig struct {
+type APIConfig struct {
 	Port int
 }
 

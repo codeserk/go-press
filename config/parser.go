@@ -2,13 +2,14 @@ package config
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/joho/godotenv"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
-const DEFINITIONS_FOLDER = "./config/definitions/"
+const definitionsFolder = "./config/definitions/"
 
 var environmentConfigFile = map[string]string{
 	"development": "development.yaml",
@@ -25,8 +26,8 @@ func Parse() (*Config, error) {
 	}
 
 	// Read config from file
-	viper.AddConfigPath(DEFINITIONS_FOLDER)
-	viper.SetConfigFile(DEFINITIONS_FOLDER + file)
+	viper.AddConfigPath(definitionsFolder)
+	viper.SetConfigFile(definitionsFolder + file)
 	viper.SetConfigType("yaml")
 	err = viper.ReadInConfig()
 	if err != nil {
@@ -34,7 +35,10 @@ func Parse() (*Config, error) {
 	}
 
 	// Read config from Env
-	godotenv.Load()
+	err = godotenv.Load()
+	if err != nil {
+		log.Printf("Failed to load .env: %v", err)
+	}
 	viper.SetEnvPrefix("app")
 	viper.AutomaticEnv()
 
@@ -57,23 +61,23 @@ func Parse() (*Config, error) {
 
 // validateAPIConfig Validates API configuration.
 func validateAPIConfig(config *Config) error {
-	if config.Api.Port <= 0 {
-		return composeError("api.port", config.Api.Port)
+	if config.API.Port <= 0 {
+		return composeError("api.port", config.API.Port)
 	}
 
 	return nil
 }
 
-// validateJWTConfig Validates the JWT configuration
+// validateJWTConfig Validates the JWT configuration.
 func validateJWTConfig(config *Config) error {
-	if len(config.JWT.Secret) == 0 {
+	if config.JWT.Secret == "" {
 		return composeError("jwt.secret", config.JWT.Secret)
 	}
 
 	return nil
 }
 
-// composeError Composes the error found for a config key
+// composeError Composes the error found for a config key.
 func composeError(key string, value interface{}) error {
 	return fmt.Errorf(`invalid config value "%v" for key "%s". please check the configuration files`, value, key)
 }

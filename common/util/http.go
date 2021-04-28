@@ -6,22 +6,32 @@ import (
 	"press/common/errors"
 )
 
-type HttpError struct {
+type HTTPError struct {
 	Message string `json:"message"`
 	Code    string `json:"code"`
 }
 
 func SendError(w http.ResponseWriter, httpCode int, err error, code string) {
-	error := HttpError{
+	errorStruct := HTTPError{
 		Message: err.Error(),
 		Code:    code,
 	}
 	if e, ok := err.(*errors.PressError); ok {
-		error.Message = e.Public()
+		errorStruct.Message = e.Public()
 	}
 
 	w.WriteHeader(httpCode)
-	json.NewEncoder(w).Encode(error)
+	w.Header().Add("content-type", "application/json")
+	// nolint
+	json.NewEncoder(w).Encode(errorStruct)
+}
+
+func SendJSON(w http.ResponseWriter, response interface{}) {
+	w.Header().Add("content-type", "application/json")
+	err := json.NewEncoder(w).Encode(response)
+	if err != nil {
+		InternalError(w, err)
+	}
 }
 
 func InternalError(w http.ResponseWriter, err error) {
@@ -29,7 +39,7 @@ func InternalError(w http.ResponseWriter, err error) {
 }
 
 func UnauthorizedError(w http.ResponseWriter) {
-	SendError(w, http.StatusUnauthorized, errors.New("Not authorized"), "Not authorized")
+	SendError(w, http.StatusUnauthorized, errors.New("not authorized"), "Not authorized")
 }
 
 func ValidationError(w http.ResponseWriter, err error) {

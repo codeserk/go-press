@@ -6,10 +6,10 @@ import (
 	"press/core/user"
 )
 
-// GetUser Gets the user from the context
-func GetUser(context context.Context) (*user.Entity) {
-	if user, ok := context.Value(constants.UserContextKey).(*user.Entity); ok {
-		return user
+// GetUser Gets the user from the context.
+func GetUser(ctx context.Context) *user.Entity {
+	if userInContext, ok := ctx.Value(constants.UserContextKey).(*user.Entity); ok {
+		return userInContext
 	}
 
 	return nil
