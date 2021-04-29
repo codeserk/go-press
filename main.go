@@ -10,8 +10,10 @@ import (
 	"github.com/gorilla/mux"
 
 	"press/common/jwt"
+	fieldModule "press/core/field/module"
 	"press/core/http/middleware"
 	realmModule "press/core/realm/module"
+	schemaModule "press/core/schema/module"
 	userModule "press/core/user/module"
 	"press/mongo"
 
@@ -52,6 +54,8 @@ func main() {
 	userService := userModule.Bootstrap(client, jwtService, router)
 	router.Use(userService.CreateAuthMiddleware)
 	realmModule.Bootstrap(client, router)
+	schemaModule.Bootstrap(client, router)
+	fieldModule.Bootstrap(client, router)
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.DeepLinking(true),

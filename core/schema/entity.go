@@ -1,14 +1,14 @@
 package schema
 
 import (
-	"press/schema/field"
+	"press/core/schema/field"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Entity struct {
-	ID     primitive.ObjectID  `bson:"_id"`
-	Realm  string              `json:"realm"`
-	Name   string              `json:"name"`
-	Fields []field.SavedEntity `json:"fields"`
+	ID      primitive.ObjectID `json:"id" bson:"_id"`
+	RealmID primitive.ObjectID `json:"realmId"`
+	Name    string             `json:"name"`
+	Fields  []*field.Entity    `json:"fields"`
 }

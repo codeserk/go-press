@@ -142,7 +142,13 @@ var doc = `{
                 "operationId": "get-realms",
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "Realms to which the current user has access",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/realm.Entity"
+                            }
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -205,6 +211,179 @@ var doc = `{
                 }
             }
         },
+        "/v1/realm/{realmId}/schema": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new schema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schema"
+                ],
+                "summary": "Creates a new schema",
+                "operationId": "create-schema",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "??",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "description": "Realm parameters",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CreateSchemaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/realm/{realmId}/schema/{schemaId}/field": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Gets all the fields of the given schema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Field"
+                ],
+                "summary": "Gets all the fields of the given schema",
+                "operationId": "get-fields",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Schema ID",
+                        "name": "schemaId",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/field.Entity"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new field",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Field"
+                ],
+                "summary": "Creates a new field",
+                "operationId": "create-field",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Schema ID",
+                        "name": "schemaId",
+                        "in": "path"
+                    },
+                    {
+                        "description": "Field parameters",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/press_core_field_http.CreateFieldRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/field.Entity"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/me": {
             "get": {
                 "security": [
@@ -248,6 +427,20 @@ var doc = `{
         }
     },
     "definitions": {
+        "CreateSchemaRequest": {
+            "type": "object",
+            "properties": {
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/press_core_schema_http.CreateFieldRequest"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "LoginRequest": {
             "type": "object",
             "required": [
@@ -256,10 +449,12 @@ var doc = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "test@test.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "test"
                 }
             }
         },
@@ -311,12 +506,83 @@ var doc = `{
                 }
             }
         },
+        "field.Entity": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primitive": {
+                    "type": "string"
+                },
+                "schemaId": {
+                    "type": "string"
+                }
+            }
+        },
         "http.createRequest": {
             "type": "object",
             "required": [
                 "name"
             ],
             "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "press_core_field_http.CreateFieldRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "primitive"
+            ],
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primitive": {
+                    "type": "string"
+                }
+            }
+        },
+        "press_core_schema_http.CreateFieldRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "primitive"
+            ],
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primitive": {
+                    "type": "integer"
+                }
+            }
+        },
+        "realm.Entity": {
+            "type": "object",
+            "properties": {
+                "authorId": {
+                    "description": "Fist iteration, a realm belongs only to one user.",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 }

@@ -10,8 +10,8 @@ import (
 )
 
 type loginRequest struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Email    string `json:"email" validate:"required,email" example:"test@test.com"`
+	Password string `json:"password" validate:"required" example:"test"`
 } // @name LoginRequest
 
 type loginResponse struct {

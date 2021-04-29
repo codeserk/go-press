@@ -15,7 +15,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Security ApiKeyAuth
-// @Success 200
+// @Success 200 {array} realm.Entity realm.Entity "Realms to which the current user has access"
 // @Failure 400 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError
 // @Router /v1/realm [get]
