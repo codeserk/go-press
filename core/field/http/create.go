@@ -46,13 +46,15 @@ func create(s field.Service) http.Handler {
 		}
 
 		params := mux.Vars(r)
-		realmID := params["realmID"]
-		schemaID := params["schemaID"]
+		realmID := params["realmId"]
+		schemaID := params["schemaId"]
 		if realmID == "" {
 			util.ValidationError(w, errors.New("invalid request, realm is missing"))
+			return
 		}
 		if schemaID == "" {
 			util.ValidationError(w, errors.New("invalid request, schema is missing"))
+			return
 		}
 
 		var input createFieldRequest
@@ -75,6 +77,7 @@ func create(s field.Service) http.Handler {
 		})
 		if err != nil {
 			util.InternalError(w, err)
+			return
 		}
 
 		util.SendJSON(w, result)

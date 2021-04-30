@@ -62,22 +62,58 @@ func (r *mongoRepository) FindOneByID(id string) (*schema.Entity, error) {
 	}
 
 	var result schema.Entity
-	err = mongo.Schemas.FindOne(ctx, bson.M{"_id": objectID}).Decode(&result)
+	query := []bson.M{
+		{"$match": bson.M{"_id": objectID}},
+		{
+			"$lookup": bson.M{
+				"from":         "fields",
+				"localField":   "_id",
+				"foreignField": "schemaId",
+				"as":           "fields",
+			},
+		},
+	}
+
+	cursor, err := mongo.Schemas.Aggregate(ctx, query)
 	if err != nil {
-		if err == mongodb.ErrNoDocuments {
-			return nil, nil
-		}
-		return nil, fmt.Errorf("error found while tryign to retrieve the schema by its id `%s`: %v", objectID, err)
+		return nil, err
+	}
+
+	defer cursor.Close(ctx)
+	// Check if there are items
+	if hasItems := cursor.Next(ctx); !hasItems {
+		return nil, nil
+	}
+	err = cursor.Decode(&result)
+	if err != nil {
+		return nil, err
 	}
 
 	return &result, nil
 }
 
 // Finds all the schemas.
-func (r *mongoRepository) Find() ([]*schema.Entity, error) {
-	var result []*schema.Entity
+func (r *mongoRepository) FindInRealm(realmID string) ([]*schema.Entity, error) {
+	objectID, err := primitive.ObjectIDFromHex(realmID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid ObjectId '%s': %v", realmID, err)
+	}
 
-	cursor, err := mongo.Schemas.Find(ctx, bson.D{{}})
+	result := make([]*schema.Entity, 0)
+
+	query := []bson.M{
+		{"$match": bson.M{"realmId": objectID}},
+		{
+			"$lookup": bson.M{
+				"from":         "fields",
+				"localField":   "_id",
+				"foreignField": "schemaId",
+				"as":           "fields",
+			},
+		},
+	}
+
+	cursor, err := mongo.Schemas.Aggregate(ctx, query)
 	if err != nil {
 		return nil, err
 	}

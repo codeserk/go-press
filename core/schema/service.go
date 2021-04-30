@@ -8,4 +8,6 @@ type CreateParams struct {
 
 type Service interface {
 	Create(params CreateParams) (*Entity, error)
+
+	GetInRealm(realmID string) ([]*Entity, error)
 }

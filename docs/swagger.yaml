@@ -60,16 +60,10 @@ definitions:
       user:
         $ref: '#/definitions/user.Entity'
     type: object
-  http.createRequest:
-    properties:
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  press_core_field.Entity:
+  field.Entity:
     properties:
       data:
+        additionalProperties: true
         type: object
       id:
         type: string
@@ -80,16 +74,12 @@ definitions:
       schemaId:
         type: string
     type: object
-  press_core_schema_field.Entity:
+  http.createRequest:
     properties:
-      data:
-        type: object
-      id:
-        type: string
       name:
         type: string
-      primitive:
-        type: string
+    required:
+    - name
     type: object
   realm.Entity:
     properties:
@@ -105,7 +95,7 @@ definitions:
     properties:
       fields:
         items:
-          $ref: '#/definitions/press_core_schema_field.Entity'
+          $ref: '#/definitions/field.Entity'
         type: array
       id:
         type: string
@@ -256,13 +246,45 @@ paths:
       tags:
       - Realm
   /v1/realm/{realmId}/schema:
+    get:
+      consumes:
+      - application/json
+      description: Gets all the schemas in the given realm
+      operationId: get-schemas
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/schema.Entity'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets all the schemas in the given realm
+      tags:
+      - Schema
     post:
       consumes:
       - application/json
       description: Creates a new schema
       operationId: create-schema
       parameters:
-      - description: ??
+      - description: Realm ID
         in: path
         name: realmId
         type: string
@@ -313,7 +335,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/press_core_field.Entity'
+              $ref: '#/definitions/field.Entity'
             type: array
         "400":
           description: Bad Request
@@ -353,7 +375,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/press_core_field.Entity'
+            $ref: '#/definitions/field.Entity'
         "400":
           description: Bad Request
           schema:

@@ -212,6 +212,56 @@ var doc = `{
             }
         },
         "/v1/realm/{realmId}/schema": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Gets all the schemas in the given realm",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schema"
+                ],
+                "summary": "Gets all the schemas in the given realm",
+                "operationId": "get-schemas",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/schema.Entity"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -233,7 +283,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "??",
+                        "description": "Realm ID",
                         "name": "realmId",
                         "in": "path"
                     },
@@ -307,7 +357,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/press_core_field.Entity"
+                                "$ref": "#/definitions/field.Entity"
                             }
                         }
                     },
@@ -369,7 +419,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/press_core_field.Entity"
+                            "$ref": "#/definitions/field.Entity"
                         }
                     },
                     "400": {
@@ -521,22 +571,12 @@ var doc = `{
                 }
             }
         },
-        "http.createRequest": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "press_core_field.Entity": {
+        "field.Entity": {
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "id": {
                     "type": "string"
@@ -552,19 +592,13 @@ var doc = `{
                 }
             }
         },
-        "press_core_schema_field.Entity": {
+        "http.createRequest": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
-                "data": {
-                    "type": "object"
-                },
-                "id": {
-                    "type": "string"
-                },
                 "name": {
-                    "type": "string"
-                },
-                "primitive": {
                     "type": "string"
                 }
             }
@@ -590,7 +624,7 @@ var doc = `{
                 "fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/press_core_schema_field.Entity"
+                        "$ref": "#/definitions/field.Entity"
                     }
                 },
                 "id": {

@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"press/common"
 	"press/common/util"
@@ -57,15 +58,17 @@ func create(s schema.Service) http.Handler {
 			return
 		}
 
-		realms, err := s.Create(schema.CreateParams{
+		result, err := s.Create(schema.CreateParams{
 			RealmID:  realmID,
 			AuthorID: currentUser.ID.Hex(),
 			Name:     input.Name,
 		})
+		log.Print(result, err)
 		if err != nil {
 			util.InternalError(w, err)
+			return
 		}
 
-		util.SendJSON(w, realms)
+		util.SendJSON(w, result)
 	})
 }

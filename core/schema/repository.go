@@ -10,5 +10,5 @@ type Repository interface {
 	InsertOne(params InsertOneParams) (*Entity, error)
 
 	FindOneByID(id string) (*Entity, error)
-	Find() ([]*Entity, error)
+	FindInRealm(realmID string) ([]*Entity, error)
 }

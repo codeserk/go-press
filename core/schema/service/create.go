@@ -8,7 +8,7 @@ import (
 func (s *service) Create(params schema.CreateParams) (*schema.Entity, error) {
 	result, err := s.repository.InsertOne(schema.InsertOneParams(params))
 	if err != nil {
-		return nil, fmt.Errorf("%v", err)
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	return result, nil

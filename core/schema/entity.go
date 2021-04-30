@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"press/core/schema/field"
+	"press/core/field"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
