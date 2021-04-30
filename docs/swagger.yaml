@@ -1,11 +1,19 @@
 basePath: /
 definitions:
+  CreateFieldRequest:
+    properties:
+      data:
+        type: object
+      name:
+        type: string
+      primitive:
+        type: string
+    required:
+    - name
+    - primitive
+    type: object
   CreateSchemaRequest:
     properties:
-      fields:
-        items:
-          $ref: '#/definitions/press_core_schema_http.CreateFieldRequest'
-        type: array
       name:
         type: string
     type: object
@@ -52,7 +60,14 @@ definitions:
       user:
         $ref: '#/definitions/user.Entity'
     type: object
-  field.Entity:
+  http.createRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  press_core_field.Entity:
     properties:
       data:
         type: object
@@ -65,36 +80,16 @@ definitions:
       schemaId:
         type: string
     type: object
-  http.createRequest:
-    properties:
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  press_core_field_http.CreateFieldRequest:
+  press_core_schema_field.Entity:
     properties:
       data:
         type: object
+      id:
+        type: string
       name:
         type: string
       primitive:
         type: string
-    required:
-    - name
-    - primitive
-    type: object
-  press_core_schema_http.CreateFieldRequest:
-    properties:
-      data:
-        type: object
-      name:
-        type: string
-      primitive:
-        type: integer
-    required:
-    - name
-    - primitive
     type: object
   realm.Entity:
     properties:
@@ -104,6 +99,19 @@ definitions:
       id:
         type: string
       name:
+        type: string
+    type: object
+  schema.Entity:
+    properties:
+      fields:
+        items:
+          $ref: '#/definitions/press_core_schema_field.Entity'
+        type: array
+      id:
+        type: string
+      name:
+        type: string
+      realmId:
         type: string
     type: object
   user.Entity:
@@ -258,7 +266,7 @@ paths:
         in: path
         name: realmId
         type: string
-      - description: Realm parameters
+      - description: Schema parameters
         in: body
         name: body
         schema:
@@ -267,7 +275,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.Entity'
         "400":
           description: Bad Request
           schema:
@@ -303,7 +313,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/field.Entity'
+              $ref: '#/definitions/press_core_field.Entity'
             type: array
         "400":
           description: Bad Request
@@ -336,14 +346,14 @@ paths:
         in: body
         name: body
         schema:
-          $ref: '#/definitions/press_core_field_http.CreateFieldRequest'
+          $ref: '#/definitions/CreateFieldRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/field.Entity'
+            $ref: '#/definitions/press_core_field.Entity'
         "400":
           description: Bad Request
           schema:

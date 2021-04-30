@@ -23,26 +23,14 @@ func New(client *mongodb.Client) schema.Repository {
 	}
 }
 
-type insertOneFieldQuery struct {
-	Name      string      `json:"name"`
-	Primitive int         `json:"primitive"`
-	Data      interface{} `json:"data"`
-}
-
 type insertOneQuery struct {
-	RealmID  primitive.ObjectID    `bson:"realmId"`
-	AuthorID primitive.ObjectID    `bson:"authorId"`
-	Name     string                `json:"name"`
-	Fields   []insertOneFieldQuery `bson:"fields"`
+	RealmID  primitive.ObjectID `bson:"realmId"`
+	AuthorID primitive.ObjectID `bson:"authorId"`
+	Name     string             `json:"name"`
 }
 
 // CreateOne Creates one schema from the given parameters
 func (r *mongoRepository) InsertOne(params schema.InsertOneParams) (*schema.Entity, error) {
-	var fields []insertOneFieldQuery
-	for _, f := range params.Fields {
-		fields = append(fields, insertOneFieldQuery{f.Name, int(f.Primitive), f.Data})
-	}
-
 	realmID, err := primitive.ObjectIDFromHex(params.RealmID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid realm id: %v", err)
@@ -52,7 +40,7 @@ func (r *mongoRepository) InsertOne(params schema.InsertOneParams) (*schema.Enti
 		return nil, fmt.Errorf("invalid author id: %v", err)
 	}
 
-	query := insertOneQuery{realmID, authorID, params.Name, fields}
+	query := insertOneQuery{realmID, authorID, params.Name}
 
 	result, err := mongo.Schemas.InsertOne(ctx, query)
 	if err != nil {

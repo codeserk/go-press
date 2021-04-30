@@ -238,7 +238,7 @@ var doc = `{
                         "in": "path"
                     },
                     {
-                        "description": "Realm parameters",
+                        "description": "Schema parameters",
                         "name": "body",
                         "in": "body",
                         "schema": {
@@ -248,7 +248,10 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.Entity"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -304,7 +307,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/field.Entity"
+                                "$ref": "#/definitions/press_core_field.Entity"
                             }
                         }
                     },
@@ -358,7 +361,7 @@ var doc = `{
                         "name": "body",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/press_core_field_http.CreateFieldRequest"
+                            "$ref": "#/definitions/CreateFieldRequest"
                         }
                     }
                 ],
@@ -366,7 +369,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/field.Entity"
+                            "$ref": "#/definitions/press_core_field.Entity"
                         }
                     },
                     "400": {
@@ -427,15 +430,27 @@ var doc = `{
         }
     },
     "definitions": {
+        "CreateFieldRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "primitive"
+            ],
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primitive": {
+                    "type": "string"
+                }
+            }
+        },
         "CreateSchemaRequest": {
             "type": "object",
             "properties": {
-                "fields": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/press_core_schema_http.CreateFieldRequest"
-                    }
-                },
                 "name": {
                     "type": "string"
                 }
@@ -506,7 +521,18 @@ var doc = `{
                 }
             }
         },
-        "field.Entity": {
+        "http.createRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "press_core_field.Entity": {
             "type": "object",
             "properties": {
                 "data": {
@@ -526,50 +552,20 @@ var doc = `{
                 }
             }
         },
-        "http.createRequest": {
+        "press_core_schema_field.Entity": {
             "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "press_core_field_http.CreateFieldRequest": {
-            "type": "object",
-            "required": [
-                "name",
-                "primitive"
-            ],
             "properties": {
                 "data": {
                     "type": "object"
+                },
+                "id": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
                 },
                 "primitive": {
                     "type": "string"
-                }
-            }
-        },
-        "press_core_schema_http.CreateFieldRequest": {
-            "type": "object",
-            "required": [
-                "name",
-                "primitive"
-            ],
-            "properties": {
-                "data": {
-                    "type": "object"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "primitive": {
-                    "type": "integer"
                 }
             }
         },
@@ -584,6 +580,26 @@ var doc = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.Entity": {
+            "type": "object",
+            "properties": {
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/press_core_schema_field.Entity"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "realmId": {
                     "type": "string"
                 }
             }

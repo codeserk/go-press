@@ -12,15 +12,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type createFieldRequest struct {
-	Name      string      `json:"name" validate:"required"`
-	Primitive int         `json:"primitive" validate:"required"`
-	Data      interface{} `json:"data"`
-} // @name CreateFieldRequest
-
-type createRequest struct {
-	Name   string               `json:"name"`
-	Fields []createFieldRequest `json:"fields"`
+type createSchemaRequest struct {
+	Name string `json:"name"`
 } // @name CreateSchemaRequest
 
 // @Tags Schema
@@ -31,9 +24,9 @@ type createRequest struct {
 // @Accept  json
 // @Produce  json
 // @Security ApiKeyAuth
-// @Param realmId path string string "??"
-// @Param body body createRequest createRequest "Realm parameters"
-// @Success 200
+// @Param realmId path string string "Realm ID"
+// @Param body body createSchemaRequest createSchemaRequest "Schema parameters"
+// @Success 200 {object} schema.Entity
 // @Failure 400 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError
 // @Router /v1/realm/{realmId}/schema [post]
@@ -47,7 +40,7 @@ func create(s schema.Service) http.Handler {
 			util.ValidationError(w, errors.New("invalid request, realm is missing"))
 		}
 
-		var input createRequest
+		var input createSchemaRequest
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
 			util.ValidationError(w, errors.New("invalid input"))
@@ -64,15 +57,10 @@ func create(s schema.Service) http.Handler {
 			return
 		}
 
-		var fields []*schema.CreateFieldParams
-		for _, f := range input.Fields {
-			fields = append(fields, &schema.CreateFieldParams{Name: f.Name, Primitive: f.Primitive, Data: f.Data})
-		}
 		realms, err := s.Create(schema.CreateParams{
 			RealmID:  realmID,
 			AuthorID: currentUser.ID.Hex(),
 			Name:     input.Name,
-			Fields:   fields,
 		})
 		if err != nil {
 			util.InternalError(w, err)
