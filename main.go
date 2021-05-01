@@ -9,9 +9,9 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"press/common/http/middleware"
 	"press/common/jwt"
 	fieldModule "press/core/field/module"
-	"press/core/http/middleware"
 	realmModule "press/core/realm/module"
 	schemaModule "press/core/schema/module"
 	userModule "press/core/user/module"
