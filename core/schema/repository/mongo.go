@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"press/core/node"
 	"press/core/schema"
 	"press/mongo"
 
@@ -26,6 +27,7 @@ func New(client *mongodb.Client) schema.Repository {
 type insertOneQuery struct {
 	RealmID  primitive.ObjectID `bson:"realmId"`
 	AuthorID primitive.ObjectID `bson:"authorId"`
+	Type     node.Type          `json:"type"`
 	Name     string             `json:"name"`
 }
 
@@ -40,7 +42,7 @@ func (r *mongoRepository) InsertOne(params schema.InsertOneParams) (*schema.Enti
 		return nil, fmt.Errorf("invalid author id: %v", err)
 	}
 
-	query := insertOneQuery{realmID, authorID, params.Name}
+	query := insertOneQuery{realmID, authorID, params.Type, params.Name}
 
 	result, err := mongo.Schemas.InsertOne(ctx, query)
 	if err != nil {

@@ -22,6 +22,11 @@ definitions:
         type: string
       slug:
         type: string
+      type:
+        enum:
+        - scene
+        - nested
+        type: string
     required:
     - name
     - schemaId
@@ -30,6 +35,11 @@ definitions:
   CreateSchemaRequest:
     properties:
       name:
+        type: string
+      type:
+        enum:
+        - scene
+        - nested
         type: string
     type: object
   LoginRequest:
@@ -124,6 +134,11 @@ definitions:
         type: string
       slug:
         type: string
+      type:
+        enum:
+        - scene
+        - nested
+        type: string
     type: object
   realm.Entity:
     properties:
@@ -137,6 +152,8 @@ definitions:
     type: object
   schema.Entity:
     properties:
+      authorId:
+        type: string
       fields:
         items:
           $ref: '#/definitions/field.Entity'
@@ -146,6 +163,11 @@ definitions:
       name:
         type: string
       realmId:
+        type: string
+      type:
+        enum:
+        - scene
+        - nested
         type: string
     type: object
   user.Entity:

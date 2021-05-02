@@ -3,6 +3,7 @@ package node
 type CreateParams struct {
 	RealmID  string
 	SchemaID string
+	Type     Type
 	Slug     string
 	Name     string
 }

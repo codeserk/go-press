@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"press/common"
 	"press/common/util"
+	"press/core/node"
 	"press/core/schema"
 
 	"github.com/go-playground/validator"
@@ -14,7 +15,8 @@ import (
 )
 
 type createSchemaRequest struct {
-	Name string `json:"name"`
+	Type node.Type `json:"type" enums:"scene,nested"`
+	Name string    `json:"name"`
 } // @name CreateSchemaRequest
 
 // @Tags Schema
@@ -61,6 +63,7 @@ func create(s schema.Service) http.Handler {
 		result, err := s.Create(schema.CreateParams{
 			RealmID:  realmID,
 			AuthorID: currentUser.ID.Hex(),
+			Type:     input.Type,
 			Name:     input.Name,
 		})
 		log.Print(result, err)

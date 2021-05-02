@@ -693,6 +693,13 @@ var doc = `{
                 },
                 "slug": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },
@@ -701,6 +708,13 @@ var doc = `{
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },
@@ -842,6 +856,13 @@ var doc = `{
                 },
                 "slug": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },
@@ -863,6 +884,9 @@ var doc = `{
         "schema.Entity": {
             "type": "object",
             "properties": {
+                "authorId": {
+                    "type": "string"
+                },
                 "fields": {
                     "type": "array",
                     "items": {
@@ -877,6 +901,13 @@ var doc = `{
                 },
                 "realmId": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },

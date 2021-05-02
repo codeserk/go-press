@@ -3,6 +3,7 @@ package node
 type InsertOneParams struct {
 	RealmID  string
 	SchemaID string
+	Type     Type
 	Slug     string
 	Name     string
 }

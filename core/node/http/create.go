@@ -14,9 +14,10 @@ import (
 )
 
 type createNodeRequest struct {
-	SchemaID string `json:"schemaId" validate:"required"`
-	Slug     string `json:"slug" validate:"required"`
-	Name     string `json:"name" validate:"required"`
+	SchemaID string    `json:"schemaId" validate:"required"`
+	Type     node.Type `json:"type" enums:"scene,nested" validate:"oneof=scene nested"`
+	Slug     string    `json:"slug" validate:"required"`
+	Name     string    `json:"name" validate:"required"`
 } // @name CreateNodeRequest
 
 // @Tags Node
@@ -64,6 +65,7 @@ func create(s node.Service) http.Handler {
 
 		result, err := s.Create(node.CreateParams{
 			RealmID:  realmID,
+			Type:     input.Type,
 			SchemaID: input.SchemaID,
 			Slug:     input.Slug,
 			Name:     input.Name,

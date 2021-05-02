@@ -26,6 +26,7 @@ func New(client *mongodb.Client) node.Repository {
 type insertOneQuery struct {
 	RealmID  primitive.ObjectID `bson:"realmId"`
 	SchemaID primitive.ObjectID `bson:"schemaId"`
+	Type     node.Type          `json:"type"`
 	Slug     string             `json:"slug"`
 	Name     string             `json:"name"`
 	Data     bson.M             `json:"data"`
@@ -42,7 +43,7 @@ func (r *mongoRepository) InsertOne(params node.InsertOneParams) (*node.Entity, 
 		return nil, fmt.Errorf("invalid schema id: %v", err)
 	}
 
-	query := insertOneQuery{realmID, schemaID, params.Slug, params.Name, bson.M{}}
+	query := insertOneQuery{realmID, schemaID, params.Type, params.Slug, params.Name, bson.M{}}
 
 	result, err := mongo.Nodes.InsertOne(ctx, query)
 	if err != nil {

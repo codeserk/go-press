@@ -678,6 +678,13 @@
                 },
                 "slug": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },
@@ -686,6 +693,13 @@
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },
@@ -827,6 +841,13 @@
                 },
                 "slug": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },
@@ -848,6 +869,9 @@
         "schema.Entity": {
             "type": "object",
             "properties": {
+                "authorId": {
+                    "type": "string"
+                },
                 "fields": {
                     "type": "array",
                     "items": {
@@ -862,6 +886,13 @@
                 },
                 "realmId": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },

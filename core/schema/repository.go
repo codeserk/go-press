@@ -1,8 +1,11 @@
 package schema
 
+import "press/core/node"
+
 type InsertOneParams struct {
 	RealmID  string
 	AuthorID string
+	Type     node.Type
 	Name     string
 }
 
