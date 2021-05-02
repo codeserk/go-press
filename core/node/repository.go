@@ -1,7 +1,5 @@
 package node
 
-import "press/core/primitive"
-
 type InsertOneParams struct {
 	RealmID  string
 	SchemaID string
@@ -9,13 +7,8 @@ type InsertOneParams struct {
 	Name     string
 }
 
-type PatchOneParams struct {
-	Key       *string
-	Name      *string
-	Primitive *primitive.Type
-	Config    *interface{}
-}
-
 type Repository interface {
 	InsertOne(params InsertOneParams) (*Entity, error)
+
+	FindInRealm(realmID string) ([]*Entity, error)
 }

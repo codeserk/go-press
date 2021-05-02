@@ -290,6 +290,38 @@ paths:
       tags:
       - Realm
   /v1/realm/{realmId}/node:
+    get:
+      consumes:
+      - application/json
+      description: Gets all the nodes in the given realm
+      operationId: get-nodes
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/node.Entity'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets all the nodes in the given realm
+      tags:
+      - Node
     post:
       consumes:
       - application/json

@@ -74,3 +74,23 @@ func (r *mongoRepository) FindOneByID(id string) (*node.Entity, error) {
 
 	return &result, nil
 }
+
+// Finds all the schemas.
+func (r *mongoRepository) FindInRealm(realmID string) ([]*node.Entity, error) {
+	objectID, err := primitive.ObjectIDFromHex(realmID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid ObjectId '%s': %v", realmID, err)
+	}
+
+	var result []*node.Entity
+	cursor, err := mongo.Nodes.Find(ctx, bson.M{"realmId": objectID})
+	if err != nil {
+		return nil, fmt.Errorf("error found while trying to retrieve the node by realm `%s`: %v", objectID, err)
+	}
+	defer cursor.Close(ctx)
+	if err = cursor.All(ctx, &result); err != nil {
+		return nil, fmt.Errorf("%v", err)
+	}
+
+	return result, nil
+}
