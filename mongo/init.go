@@ -12,6 +12,7 @@ import (
 var Schemas *mongo.Collection
 var Fields *mongo.Collection
 var Scenes *mongo.Collection
+var Nodes *mongo.Collection
 var Users *mongo.Collection
 var Realms *mongo.Collection
 
@@ -33,6 +34,7 @@ func Connect(connectionURL string) (*mongo.Client, error) {
 	Schemas = client.Database("press").Collection("schemas")
 	Fields = client.Database("press").Collection("fields")
 	Scenes = client.Database("press").Collection("scenes")
+	Nodes = client.Database("press").Collection("nodes")
 	createUsersSchema(client)
 	createRealmSchema(client)
 

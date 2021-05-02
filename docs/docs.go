@@ -211,6 +211,63 @@ var doc = `{
                 }
             }
         },
+        "/v1/realm/{realmId}/node": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new node",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Node"
+                ],
+                "summary": "Creates a new node",
+                "operationId": "create-node",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "description": "Node parameters",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CreateNodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/node.Entity"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/realm/{realmId}/schema": {
             "get": {
                 "security": [
@@ -570,6 +627,25 @@ var doc = `{
                 }
             }
         },
+        "CreateNodeRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "schemaId",
+                "slug"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "schemaId": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                }
+            }
+        },
         "CreateSchemaRequest": {
             "type": "object",
             "properties": {
@@ -691,6 +767,30 @@ var doc = `{
             ],
             "properties": {
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "node.Entity": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "realmId": {
+                    "type": "string"
+                },
+                "schemaId": {
+                    "type": "string"
+                },
+                "slug": {
                     "type": "string"
                 }
             }

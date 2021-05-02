@@ -12,6 +12,7 @@ import (
 	"press/common/http/middleware"
 	"press/common/jwt"
 	fieldModule "press/core/field/module"
+	nodeModule "press/core/node/module"
 	realmModule "press/core/realm/module"
 	schemaModule "press/core/schema/module"
 	userModule "press/core/user/module"
@@ -56,6 +57,7 @@ func main() {
 	realmModule.Bootstrap(client, router)
 	schemaModule.Bootstrap(client, router)
 	fieldModule.Bootstrap(client, router)
+	nodeModule.Bootstrap(client, router)
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.DeepLinking(true),

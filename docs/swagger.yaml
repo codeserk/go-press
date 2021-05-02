@@ -14,6 +14,19 @@ definitions:
     - key
     - primitive
     type: object
+  CreateNodeRequest:
+    properties:
+      name:
+        type: string
+      schemaId:
+        type: string
+      slug:
+        type: string
+    required:
+    - name
+    - schemaId
+    - slug
+    type: object
   CreateSchemaRequest:
     properties:
       name:
@@ -95,6 +108,22 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  node.Entity:
+    properties:
+      data:
+        additionalProperties: true
+        type: object
+      id:
+        type: string
+      name:
+        type: string
+      realmId:
+        type: string
+      schemaId:
+        type: string
+      slug:
+        type: string
     type: object
   realm.Entity:
     properties:
@@ -260,6 +289,42 @@ paths:
       summary: Creates a new realm
       tags:
       - Realm
+  /v1/realm/{realmId}/node:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new node
+      operationId: create-node
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      - description: Node parameters
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/CreateNodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/node.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new node
+      tags:
+      - Node
   /v1/realm/{realmId}/schema:
     get:
       consumes:
