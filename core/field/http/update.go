@@ -12,32 +12,32 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
-	"github.com/iancoleman/strcase"
 )
 
-type createFieldRequest struct {
-	Key       string         `json:"key" validate:"required"`
-	Name      string         `json:"name"`
-	Primitive primitive.Type `json:"primitive" validate:"required"`
-	Data      interface{}    `json:"data"`
-} // @name CreateFieldRequest
+type updateFieldRequest struct {
+	Key       *string         `json:"key"`
+	Name      *string         `json:"name"`
+	Primitive *primitive.Type `json:"primitive"`
+	Config    *interface{}    `json:"config"`
+} // @name UpdateFieldRequest
 
 // @Tags Field
-// Creates a new field
-// @Summary Creates a new field
-// @Description Creates a new field
-// @ID create-field
+// Updates a field
+// @Summary Updates a field
+// @Description Updates a field
+// @ID update-field
 // @Accept  json
 // @Produce  json
 // @Security ApiKeyAuth
 // @Param realmId path string string "Realm ID"
 // @Param schemaId path string string "Schema ID"
-// @Param body body createFieldRequest createFieldRequest "Field parameters"
+// @Param fieldId path string string "Field ID"
+// @Param body body updateFieldRequest updateFieldRequest "Field parameters"
 // @Success 200 {object} field.Entity
 // @Failure 400 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError
-// @Router /v1/realm/{realmId}/schema/{schemaId}/field [post]
-func create(s field.Service) http.Handler {
+// @Router /v1/realm/{realmId}/schema/{schemaId}/field/{fieldId} [patch]
+func update(s field.Service) http.Handler {
 	validate := validator.New()
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +50,7 @@ func create(s field.Service) http.Handler {
 		params := mux.Vars(r)
 		realmID := params["realmId"]
 		schemaID := params["schemaId"]
+		fieldID := params["fieldId"]
 		if realmID == "" {
 			util.ValidationError(w, errors.New("invalid request, realm is missing"))
 			return
@@ -58,8 +59,12 @@ func create(s field.Service) http.Handler {
 			util.ValidationError(w, errors.New("invalid request, schema is missing"))
 			return
 		}
+		if fieldID == "" {
+			util.ValidationError(w, errors.New("invalid request, field is missing"))
+			return
+		}
 
-		var input createFieldRequest
+		var input updateFieldRequest
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
 			util.ValidationError(w, fmt.Errorf("invalid input: %v", err))
@@ -71,16 +76,7 @@ func create(s field.Service) http.Handler {
 			return
 		}
 
-		if input.Name == "" {
-			input.Name = strcase.ToScreamingDelimited(input.Key, ' ', ' ', false)
-		}
-		result, err := s.Create(field.CreateParams{
-			SchemaID:  schemaID,
-			Key:       input.Key,
-			Name:      input.Name,
-			Primitive: input.Primitive,
-			Config:    input.Primitive.DefaultConfig(),
-		})
+		result, err := s.Update(fieldID, field.UpdateParams(input))
 		if err != nil {
 			util.InternalError(w, err)
 			return

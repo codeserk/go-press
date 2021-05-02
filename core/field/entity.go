@@ -9,7 +9,8 @@ import (
 type Entity struct {
 	ID        primitive.ObjectID     `json:"id" bson:"_id"`
 	SchemaID  primitive.ObjectID     `json:"schemaId"`
+	Key       string                 `json:"key"`
 	Name      string                 `json:"name"`
 	Primitive pressPrimitive.Type    `json:"primitive"`
-	Data      map[string]interface{} `json:"data" bson:"data,inline"`
+	Config    map[string]interface{} `json:"config" bson:"config"`
 }

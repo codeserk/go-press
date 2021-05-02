@@ -4,12 +4,14 @@ definitions:
     properties:
       data:
         type: object
+      key:
+        type: string
       name:
         type: string
       primitive:
         type: string
     required:
-    - name
+    - key
     - primitive
     type: object
   CreateSchemaRequest:
@@ -60,12 +62,25 @@ definitions:
       user:
         $ref: '#/definitions/user.Entity'
     type: object
+  UpdateFieldRequest:
+    properties:
+      config:
+        type: object
+      key:
+        type: string
+      name:
+        type: string
+      primitive:
+        type: string
+    type: object
   field.Entity:
     properties:
-      data:
+      config:
         additionalProperties: true
         type: object
       id:
+        type: string
+      key:
         type: string
       name:
         type: string
@@ -387,6 +402,50 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Creates a new field
+      tags:
+      - Field
+  /v1/realm/{realmId}/schema/{schemaId}/field/{fieldId}:
+    patch:
+      consumes:
+      - application/json
+      description: Updates a field
+      operationId: update-field
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      - description: Schema ID
+        in: path
+        name: schemaId
+        type: string
+      - description: Field ID
+        in: path
+        name: fieldId
+        type: string
+      - description: Field parameters
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/UpdateFieldRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/field.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates a field
       tags:
       - Field
   /v1/user/me:

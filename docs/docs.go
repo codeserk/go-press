@@ -437,6 +437,75 @@ var doc = `{
                 }
             }
         },
+        "/v1/realm/{realmId}/schema/{schemaId}/field/{fieldId}": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Updates a field",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Field"
+                ],
+                "summary": "Updates a field",
+                "operationId": "update-field",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Schema ID",
+                        "name": "schemaId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Field ID",
+                        "name": "fieldId",
+                        "in": "path"
+                    },
+                    {
+                        "description": "Field parameters",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateFieldRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/field.Entity"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/me": {
             "get": {
                 "security": [
@@ -483,12 +552,15 @@ var doc = `{
         "CreateFieldRequest": {
             "type": "object",
             "required": [
-                "name",
+                "key",
                 "primitive"
             ],
             "properties": {
                 "data": {
                     "type": "object"
+                },
+                "key": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -571,14 +643,34 @@ var doc = `{
                 }
             }
         },
+        "UpdateFieldRequest": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "object"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "primitive": {
+                    "type": "string"
+                }
+            }
+        },
         "field.Entity": {
             "type": "object",
             "properties": {
-                "data": {
+                "config": {
                     "type": "object",
                     "additionalProperties": true
                 },
                 "id": {
+                    "type": "string"
+                },
+                "key": {
                     "type": "string"
                 },
                 "name": {

@@ -26,9 +26,10 @@ func New(client *mongodb.Client) field.Repository {
 
 type insertOneQuery struct {
 	SchemaID  primitive.ObjectID  `bson:"schemaId"`
+	Key       string              `json:"key"`
 	Name      string              `json:"name"`
 	Primitive pressPrimitive.Type `json:"primitive"`
-	Data      interface{}         `json:"data"`
+	Config    interface{}         `json:"config"`
 }
 
 // CreateOne Creates one schema from the given parameters
@@ -38,7 +39,7 @@ func (r *mongoRepository) InsertOne(params field.InsertOneParams) (*field.Entity
 		return nil, fmt.Errorf("invalid schema id: %v", err)
 	}
 
-	query := insertOneQuery{schemaID, params.Name, params.Primitive, params.Data}
+	query := insertOneQuery{schemaID, params.Key, params.Name, params.Primitive, params.Config}
 
 	result, err := mongo.Fields.InsertOne(ctx, query)
 	if err != nil {
@@ -50,6 +51,41 @@ func (r *mongoRepository) InsertOne(params field.InsertOneParams) (*field.Entity
 	}
 
 	return nil, fmt.Errorf("error found while trying to convert the InsertedID into an ObjectID")
+}
+
+type patchOneQuery struct {
+	Key       *string              `json:"key"`
+	Name      *string              `json:"name"`
+	Primitive *pressPrimitive.Type `json:"primitive"`
+	Config    *interface{}         `bson:"config"`
+}
+
+func (r *mongoRepository) PatchOne(fieldID string, params field.PatchOneParams) (*field.Entity, error) {
+	objectID, err := primitive.ObjectIDFromHex(fieldID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid field id: %v", err)
+	}
+
+	query := bson.M{}
+	if params.Key != nil {
+		query["name"] = params.Key
+	}
+	if params.Name != nil {
+		query["key"] = params.Key
+	}
+	if params.Primitive != nil {
+		query["primitive"] = params.Primitive
+	}
+	if params.Config != nil {
+		query["config"] = params.Config
+	}
+
+	_, err = mongo.Fields.UpdateOne(ctx, bson.M{"_id": objectID}, bson.M{"$set": query})
+	if err != nil {
+		return nil, err
+	}
+
+	return r.FindOneByID(objectID.Hex())
 }
 
 // FindOneByID Tries to find a schema by its id. Returns nil if the schema was not found.
