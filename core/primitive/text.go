@@ -16,4 +16,10 @@ func (r textResolver) DefaultConfig() interface{} {
 	}
 }
 
+func (r textResolver) DefaultValue(config interface{}) (interface{}, error) {
+	value := ""
+
+	return value, nil
+}
+
 var text textResolver = textResolver{}

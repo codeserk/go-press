@@ -13,6 +13,7 @@ type Entity struct {
 
 type Resolver interface {
 	DefaultConfig() interface{}
+	DefaultValue(config interface{}) (interface{}, error)
 	// ValidateConfig(config interface{}) error
 	// ValidateData(data interface{}) error
 }
@@ -28,4 +29,8 @@ func (t Type) Resolver() Resolver {
 
 func (t Type) DefaultConfig() interface{} {
 	return t.Resolver().DefaultConfig()
+}
+
+func (t Type) DefaultValue(config interface{}) (interface{}, error) {
+	return t.Resolver().DefaultValue(config)
 }

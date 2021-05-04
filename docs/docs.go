@@ -194,7 +194,10 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/realm.Entity"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",

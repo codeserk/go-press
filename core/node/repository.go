@@ -6,6 +6,7 @@ type InsertOneParams struct {
 	Type     Type
 	Slug     string
 	Name     string
+	Data     interface{}
 }
 
 type Repository interface {

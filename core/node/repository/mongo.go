@@ -29,7 +29,7 @@ type insertOneQuery struct {
 	Type     node.Type          `json:"type"`
 	Slug     string             `json:"slug"`
 	Name     string             `json:"name"`
-	Data     bson.M             `json:"data"`
+	Data     interface{}        `json:"data"`
 }
 
 // CreateOne Creates one node from the given parameters
@@ -43,7 +43,7 @@ func (r *mongoRepository) InsertOne(params node.InsertOneParams) (*node.Entity, 
 		return nil, fmt.Errorf("invalid schema id: %v", err)
 	}
 
-	query := insertOneQuery{realmID, schemaID, params.Type, params.Slug, params.Name, bson.M{}}
+	query := insertOneQuery{realmID, schemaID, params.Type, params.Slug, params.Name, params.Data}
 
 	result, err := mongo.Nodes.InsertOne(ctx, query)
 	if err != nil {
@@ -83,7 +83,7 @@ func (r *mongoRepository) FindInRealm(realmID string) ([]*node.Entity, error) {
 		return nil, fmt.Errorf("invalid ObjectId '%s': %v", realmID, err)
 	}
 
-	var result []*node.Entity
+	result := make([]*node.Entity, 0)
 	cursor, err := mongo.Nodes.Find(ctx, bson.M{"realmId": objectID})
 	if err != nil {
 		return nil, fmt.Errorf("error found while trying to retrieve the node by realm `%s`: %v", objectID, err)

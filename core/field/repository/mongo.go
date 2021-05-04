@@ -114,7 +114,7 @@ func (r *mongoRepository) FindBySchema(schemaID string) ([]*field.Entity, error)
 		return nil, fmt.Errorf("invalid ObjectId '%s': %v", schemaID, err)
 	}
 
-	var result []*field.Entity
+	result := make([]*field.Entity, 0)
 	cursor, err := mongo.Fields.Find(ctx, bson.M{"schemaId": objectID})
 	if err != nil {
 		return nil, fmt.Errorf("error found while trying to retrieve the field by schema `%s`: %v", objectID, err)

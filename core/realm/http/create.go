@@ -24,7 +24,7 @@ type createRequest struct {
 // @Produce  json
 // @Security ApiKeyAuth
 // @Param body body createRequest createRequest "Realm parameters"
-// @Success 200
+// @Success 200 {object} realm.Entity
 // @Failure 400 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError
 // @Router /v1/realm [post]

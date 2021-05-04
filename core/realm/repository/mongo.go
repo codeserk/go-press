@@ -73,7 +73,7 @@ func (r *mongoRepository) FindOneByID(id string) (*realm.Entity, error) {
 func (r *mongoRepository) FindByAuthor(author *user.Entity) ([]*realm.Entity, error) {
 	matchStage := bson.D{primitive.E{Key: "$match", Value: bson.M{"author": author.ID}}}
 
-	var result []*realm.Entity
+	result := make([]*realm.Entity, 0)
 	cursor, err := mongo.Realms.Aggregate(ctx, mongodb.Pipeline{matchStage})
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)

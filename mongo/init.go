@@ -19,7 +19,7 @@ var Realms *mongo.Collection
 func Connect(connectionURL string) (*mongo.Client, error) {
 	cxt, cancel := CreateContext()
 	defer cancel()
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
+	clientOptions := options.Client().ApplyURI(connectionURL)
 	client, err := mongo.Connect(cxt, clientOptions)
 	if err != nil {
 		return nil, err
@@ -61,6 +61,6 @@ func createRealmSchema(client *mongo.Client) {
 }
 
 func CreateContext() (context.Context, context.CancelFunc) {
-	// nolint
-	return context.WithTimeout(context.Background(), 10 * time.Second)
+	
+	return context.WithTimeout(context.Background(), 10*time.Second)
 }

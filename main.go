@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -43,7 +44,7 @@ func main() {
 		log.Fatalf("error found while trying to load the configuration: %v", err)
 	}
 
-	client, err := mongo.Connect(conf.MongoDB.Host)
+	client, err := mongo.Connect(fmt.Sprintf("mongodb://%v:%v/", conf.MongoDB.Host, conf.MongoDB.Port))
 	if err != nil {
 		log.Fatalf("error found while connect to mongodb: %v", err)
 	}
@@ -55,9 +56,9 @@ func main() {
 	userService := userModule.Bootstrap(client, jwtService, router)
 	router.Use(userService.CreateAuthMiddleware)
 	realmModule.Bootstrap(client, router)
-	schemaModule.Bootstrap(client, router)
+	schemaService := schemaModule.Bootstrap(client, router)
 	fieldModule.Bootstrap(client, router)
-	nodeModule.Bootstrap(client, router)
+	nodeModule.Bootstrap(client, router, schemaService)
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.DeepLinking(true),

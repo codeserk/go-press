@@ -1,11 +1,15 @@
 package service
 
-import "press/core/node"
+import (
+	"press/core/node"
+	"press/core/schema"
+)
 
 type service struct {
 	repository node.Repository
+	schemas    schema.Service
 }
 
-func New(repository node.Repository) node.Service {
-	return &service{repository}
+func New(repository node.Repository, schemas schema.Service) node.Service {
+	return &service{repository, schemas}
 }

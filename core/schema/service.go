@@ -12,5 +12,6 @@ type CreateParams struct {
 type Service interface {
 	Create(params CreateParams) (*Entity, error)
 
+	GetByID(schemaID string) (*Entity, error)
 	GetInRealm(realmID string) ([]*Entity, error)
 }

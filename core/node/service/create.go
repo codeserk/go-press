@@ -6,7 +6,21 @@ import (
 )
 
 func (s *service) Create(params node.CreateParams) (*node.Entity, error) {
-	result, err := s.repository.InsertOne(node.InsertOneParams(params))
+	schema, err := s.schemas.GetByID(params.SchemaID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid schema: %v", err)
+	}
+
+	insertParams := node.InsertOneParams{
+		RealmID:  params.RealmID,
+		SchemaID: params.SchemaID,
+		Type:     params.Type,
+		Slug:     params.Slug,
+		Name:     params.Name,
+		Data:     schema.DefaultValue(),
+	}
+
+	result, err := s.repository.InsertOne(insertParams)
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)
 	}
