@@ -96,6 +96,15 @@ definitions:
       primitive:
         type: string
     type: object
+  UpdateNodeRequest:
+    properties:
+      data:
+        type: object
+      name:
+        type: string
+      slug:
+        type: string
+    type: object
   field.Entity:
     properties:
       config:
@@ -379,6 +388,46 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Creates a new node
+      tags:
+      - Node
+  /v1/realm/{realmId}/node/{nodeId}:
+    patch:
+      consumes:
+      - application/json
+      description: Updates a node
+      operationId: update-node
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      - description: Node ID
+        in: path
+        name: nodeId
+        type: string
+      - description: Node parameters
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/UpdateNodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/node.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates a node
       tags:
       - Node
   /v1/realm/{realmId}/schema:

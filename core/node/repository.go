@@ -9,8 +9,15 @@ type InsertOneParams struct {
 	Data     interface{}
 }
 
+type PatchOneParams struct {
+	Slug *string
+	Name *string
+	Data *interface{}
+}
+
 type Repository interface {
 	InsertOne(params InsertOneParams) (*Entity, error)
+	PatchOne(id string, params PatchOneParams) (*Entity, error)
 
 	FindInRealm(realmID string) ([]*Entity, error)
 }

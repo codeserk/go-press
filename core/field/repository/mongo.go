@@ -68,10 +68,10 @@ func (r *mongoRepository) PatchOne(fieldID string, params field.PatchOneParams) 
 
 	query := bson.M{}
 	if params.Key != nil {
-		query["name"] = params.Key
+		query["key"] = params.Key
 	}
 	if params.Name != nil {
-		query["key"] = params.Key
+		query["name"] = params.Name
 	}
 	if params.Primitive != nil {
 		query["primitive"] = params.Primitive

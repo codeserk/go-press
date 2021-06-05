@@ -32,6 +32,12 @@ type insertOneQuery struct {
 	Data     interface{}        `json:"data"`
 }
 
+type patchOneQuery struct {
+	Slug string      `json:"slug"`
+	Name string      `json:"name"`
+	Data interface{} `json:"data"`
+}
+
 // CreateOne Creates one node from the given parameters
 func (r *mongoRepository) InsertOne(params node.InsertOneParams) (*node.Entity, error) {
 	realmID, err := primitive.ObjectIDFromHex(params.RealmID)
@@ -55,6 +61,31 @@ func (r *mongoRepository) InsertOne(params node.InsertOneParams) (*node.Entity, 
 	}
 
 	return nil, fmt.Errorf("error found while trying to convert the InsertedID into an ObjectID")
+}
+
+func (r *mongoRepository) PatchOne(id string, params node.PatchOneParams) (*node.Entity, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, fmt.Errorf("invalid node id: %v", err)
+	}
+
+	query := bson.M{}
+	if params.Slug != nil {
+		query["slug"] = params.Slug
+	}
+	if params.Name != nil {
+		query["name"] = params.Name
+	}
+	if params.Data != nil {
+		query["data"] = params.Data
+	}
+
+	_, err = mongo.Nodes.UpdateOne(ctx, bson.M{"_id": objectID}, bson.M{"$set": query})
+	if err != nil {
+		return nil, err
+	}
+
+	return r.FindOneByID(objectID.Hex())
 }
 
 // FindOneByID Tries to find a schema by its id. Returns nil if the schema was not found.
