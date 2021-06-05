@@ -5,6 +5,7 @@ type Type string
 const (
 	Text    Type = "text"
 	Boolean Type = "boolean"
+	Number  Type = "number"
 )
 
 type Entity struct {
@@ -25,6 +26,8 @@ func (t Type) Resolver() Resolver {
 		return text
 	case Boolean:
 		return boolean
+	case Number:
+		return number
 	default:
 		return text
 	}
