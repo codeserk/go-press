@@ -3,7 +3,8 @@ package primitive
 type Type string
 
 const (
-	Text Type = "text"
+	Text    Type = "text"
+	Boolean Type = "boolean"
 )
 
 type Entity struct {
@@ -22,6 +23,8 @@ func (t Type) Resolver() Resolver {
 	switch t {
 	case Text:
 		return text
+	case Boolean:
+		return boolean
 	default:
 		return text
 	}
