@@ -89,6 +89,8 @@ definitions:
     properties:
       config:
         type: object
+      description:
+        type: string
       key:
         type: string
       name:
@@ -110,6 +112,8 @@ definitions:
       config:
         additionalProperties: true
         type: object
+      description:
+        type: string
       id:
         type: string
       key:
@@ -575,6 +579,44 @@ paths:
       tags:
       - Field
   /v1/realm/{realmId}/schema/{schemaId}/field/{fieldId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a field
+      operationId: delete-field
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      - description: Schema ID
+        in: path
+        name: schemaId
+        type: string
+      - description: Field ID
+        in: path
+        name: fieldId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a field
+      tags:
+      - Field
     patch:
       consumes:
       - application/json

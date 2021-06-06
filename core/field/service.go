@@ -11,16 +11,17 @@ type CreateParams struct {
 }
 
 type UpdateParams struct {
-	Key       *string
-	Name      *string
-	Primitive *primitive.Type
-	Config    *interface{}
+	Key         *string
+	Name        *string
+	Description *string
+	Primitive   *primitive.Type
+	Config      *interface{}
 }
 
 type Service interface {
 	Create(params CreateParams) (*Entity, error)
-
 	Update(fieldID string, params UpdateParams) (*Entity, error)
+	Delete(fieldId string) error
 
 	GetBySchema(schemaID string) ([]*Entity, error)
 }

@@ -611,6 +611,65 @@ var doc = `{
             }
         },
         "/v1/realm/{realmId}/schema/{schemaId}/field/{fieldId}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Deletes a field",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Field"
+                ],
+                "summary": "Deletes a field",
+                "operationId": "delete-field",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Schema ID",
+                        "name": "schemaId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Field ID",
+                        "name": "fieldId",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {
@@ -855,6 +914,9 @@ var doc = `{
                 "config": {
                     "type": "object"
                 },
+                "description": {
+                    "type": "string"
+                },
                 "key": {
                     "type": "string"
                 },
@@ -886,6 +948,9 @@ var doc = `{
                 "config": {
                     "type": "object",
                     "additionalProperties": true
+                },
+                "description": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "string"

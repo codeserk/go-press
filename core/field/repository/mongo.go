@@ -54,10 +54,11 @@ func (r *mongoRepository) InsertOne(params field.InsertOneParams) (*field.Entity
 }
 
 type patchOneQuery struct {
-	Key       *string              `json:"key"`
-	Name      *string              `json:"name"`
-	Primitive *pressPrimitive.Type `json:"primitive"`
-	Config    *interface{}         `bson:"config"`
+	Key         *string              `json:"key"`
+	Name        *string              `json:"name"`
+	Description *string              `json:"description"`
+	Primitive   *pressPrimitive.Type `json:"primitive"`
+	Config      *interface{}         `bson:"config"`
 }
 
 func (r *mongoRepository) PatchOne(fieldID string, params field.PatchOneParams) (*field.Entity, error) {
@@ -72,6 +73,9 @@ func (r *mongoRepository) PatchOne(fieldID string, params field.PatchOneParams) 
 	}
 	if params.Name != nil {
 		query["name"] = params.Name
+	}
+	if params.Description != nil {
+		query["description"] = params.Description
 	}
 	if params.Primitive != nil {
 		query["primitive"] = params.Primitive
@@ -125,4 +129,16 @@ func (r *mongoRepository) FindBySchema(schemaID string) ([]*field.Entity, error)
 	}
 
 	return result, nil
+}
+
+// DeleteOne Deletes one field by its id
+func (r *mongoRepository) DeleteOne(fieldID string) error {
+	objectID, err := primitive.ObjectIDFromHex(fieldID)
+	if err != nil {
+		return fmt.Errorf("invalid ObjectId '%s': %v", fieldID, err)
+	}
+
+	_, err = mongo.Fields.DeleteOne(ctx, bson.M{"_id": objectID})
+
+	return err
 }
