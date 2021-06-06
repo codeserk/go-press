@@ -7,6 +7,7 @@ const (
 	Boolean Type = "boolean"
 	Number  Type = "number"
 	Date    Type = "date"
+	Options Type = "options"
 )
 
 type Entity struct {
@@ -31,6 +32,8 @@ func (t Type) Resolver() Resolver {
 		return number
 	case Date:
 		return date
+	case Options:
+		return options
 	default:
 		return text
 	}
