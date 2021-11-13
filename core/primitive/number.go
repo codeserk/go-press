@@ -16,6 +16,10 @@ func (r numberResolver) DefaultConfig() interface{} {
 	}
 }
 
+func (r numberResolver) TransformConfig(config interface{}) (interface{}, error) {
+	return config, nil
+}
+
 func (r numberResolver) DefaultValue(config interface{}) (interface{}, error) {
 	value := 0
 

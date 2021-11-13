@@ -2,7 +2,7 @@ version: '2'
 
 services:
   database:
-    image: mongo:latest
+    image: mongo:4.4.6
     volumes:
       - ./.data/db:/data/db
     command: mongod --port 27019

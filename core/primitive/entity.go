@@ -8,6 +8,7 @@ const (
 	Number  Type = "number"
 	Date    Type = "date"
 	Options Type = "options"
+	Node    Type = "node"
 )
 
 type Entity struct {
@@ -17,6 +18,7 @@ type Entity struct {
 
 type Resolver interface {
 	DefaultConfig() interface{}
+	TransformConfig(config interface{}) (interface{}, error)
 	DefaultValue(config interface{}) (interface{}, error)
 	// ValidateConfig(config interface{}) error
 	// ValidateData(data interface{}) error
@@ -34,6 +36,8 @@ func (t Type) Resolver() Resolver {
 		return date
 	case Options:
 		return options
+	case Node:
+		return node
 	default:
 		return text
 	}
@@ -41,6 +45,10 @@ func (t Type) Resolver() Resolver {
 
 func (t Type) DefaultConfig() interface{} {
 	return t.Resolver().DefaultConfig()
+}
+
+func (t Type) TransformConfig(config interface{}) (interface{}, error) {
+	return t.Resolver().TransformConfig(config)
 }
 
 func (t Type) DefaultValue(config interface{}) (interface{}, error) {

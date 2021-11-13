@@ -14,6 +14,10 @@ func (r dateResolver) DefaultConfig() interface{} {
 	}
 }
 
+func (r dateResolver) TransformConfig(config interface{}) (interface{}, error) {
+	return config, nil
+}
+
 func (r dateResolver) DefaultValue(config interface{}) (interface{}, error) {
 	value := ""
 
