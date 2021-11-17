@@ -76,7 +76,6 @@ func update(s field.Service) http.Handler {
 			util.ValidationError(w, err)
 			return
 		}
-		fmt.Print(*input.Config)
 		c, err := input.Primitive.TransformConfig(*input.Config)
 		if err != nil {
 			util.ValidationError(w, err)

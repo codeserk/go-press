@@ -11,8 +11,8 @@ import (
 
 // asdas.
 type meResponse struct {
-	User *user.Entity `json:"user"`
-	Jwt  string       `json:"jwt"`
+	User *user.Entity `json:"user" validate:"required"`
+	Jwt  string       `json:"jwt" validate:"required"`
 } // @name MeResponse
 
 // @Tags User

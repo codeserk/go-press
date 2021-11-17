@@ -7,11 +7,11 @@ import (
 )
 
 type Entity struct {
-	ID          primitive.ObjectID     `json:"id" bson:"_id"`
-	SchemaID    primitive.ObjectID     `json:"schemaId"`
-	Key         string                 `json:"key"`
-	Name        string                 `json:"name"`
-	Description string                 `json:"description"`
-	Primitive   pressPrimitive.Type    `json:"primitive"`
-	Config      map[string]interface{} `json:"config" bson:"config"`
+	ID          primitive.ObjectID     `json:"id" bson:"_id" validate:"required"`
+	SchemaID    primitive.ObjectID     `json:"schemaId" validate:"required"`
+	Key         string                 `json:"key" validate:"required"`
+	Name        string                 `json:"name" validate:"required"`
+	Description string                 `json:"description" validate:"required"`
+	Primitive   pressPrimitive.Type    `json:"primitive" validate:"required"`
+	Config      map[string]interface{} `json:"config" bson:"config" validate:"required"`
 }

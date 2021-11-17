@@ -16,6 +16,9 @@ definitions:
     type: object
   CreateNodeRequest:
     properties:
+      data:
+        additionalProperties: true
+        type: object
       name:
         type: string
       schemaId:
@@ -25,7 +28,8 @@ definitions:
       type:
         enum:
         - scene
-        - nested
+        - model
+        - view
         type: string
     required:
     - name
@@ -60,6 +64,9 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/user.Entity'
+    required:
+    - jwt
+    - user
     type: object
   MeResponse:
     properties:
@@ -67,6 +74,9 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/user.Entity'
+    required:
+    - jwt
+    - user
     type: object
   RegisterRequest:
     properties:
@@ -101,6 +111,7 @@ definitions:
   UpdateNodeRequest:
     properties:
       data:
+        additionalProperties: true
         type: object
       name:
         type: string
@@ -124,6 +135,14 @@ definitions:
         type: string
       schemaId:
         type: string
+    required:
+    - config
+    - description
+    - id
+    - key
+    - name
+    - primitive
+    - schemaId
     type: object
   http.createRequest:
     properties:
@@ -150,8 +169,37 @@ definitions:
       type:
         enum:
         - scene
-        - nested
+        - model
+        - view
         type: string
+      views:
+        items:
+          $ref: '#/definitions/node.View'
+        type: array
+    required:
+    - data
+    - id
+    - name
+    - realmId
+    - schemaId
+    - slug
+    - type
+    type: object
+  node.View:
+    properties:
+      children:
+        items:
+          $ref: '#/definitions/node.View'
+        type: array
+      data:
+        additionalProperties: true
+        type: object
+      schemaId:
+        type: string
+    required:
+    - children
+    - data
+    - schemaId
     type: object
   realm.Entity:
     properties:
@@ -162,6 +210,10 @@ definitions:
         type: string
       name:
         type: string
+    required:
+    - authorId
+    - id
+    - name
     type: object
   schema.Entity:
     properties:
@@ -180,8 +232,16 @@ definitions:
       type:
         enum:
         - scene
-        - nested
+        - model
+        - view
         type: string
+    required:
+    - authorId
+    - fields
+    - id
+    - name
+    - realmId
+    - type
     type: object
   user.Entity:
     properties:

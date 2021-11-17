@@ -6,13 +6,13 @@ type InsertOneParams struct {
 	Type     Type
 	Slug     string
 	Name     string
-	Data     interface{}
+	Data     map[string]interface{}
 }
 
 type PatchOneParams struct {
 	Slug *string
 	Name *string
-	Data *interface{}
+	Data *map[string]interface{}
 }
 
 type Repository interface {

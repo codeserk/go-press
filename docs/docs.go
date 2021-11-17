@@ -810,6 +810,10 @@ var doc = `{
                 "slug"
             ],
             "properties": {
+                "data": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
                 "name": {
                     "type": "string"
                 },
@@ -823,7 +827,8 @@ var doc = `{
                     "type": "string",
                     "enum": [
                         "scene",
-                        "nested"
+                        "model",
+                        "view"
                     ]
                 }
             }
@@ -862,6 +867,10 @@ var doc = `{
         },
         "LoginResponse": {
             "type": "object",
+            "required": [
+                "jwt",
+                "user"
+            ],
             "properties": {
                 "jwt": {
                     "type": "string"
@@ -873,6 +882,10 @@ var doc = `{
         },
         "MeResponse": {
             "type": "object",
+            "required": [
+                "jwt",
+                "user"
+            ],
             "properties": {
                 "jwt": {
                     "type": "string"
@@ -932,7 +945,8 @@ var doc = `{
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "name": {
                     "type": "string"
@@ -944,6 +958,15 @@ var doc = `{
         },
         "field.Entity": {
             "type": "object",
+            "required": [
+                "config",
+                "description",
+                "id",
+                "key",
+                "name",
+                "primitive",
+                "schemaId"
+            ],
             "properties": {
                 "config": {
                     "type": "object",
@@ -982,6 +1005,15 @@ var doc = `{
         },
         "node.Entity": {
             "type": "object",
+            "required": [
+                "data",
+                "id",
+                "name",
+                "realmId",
+                "schemaId",
+                "slug",
+                "type"
+            ],
             "properties": {
                 "data": {
                     "type": "object",
@@ -1006,13 +1038,48 @@ var doc = `{
                     "type": "string",
                     "enum": [
                         "scene",
-                        "nested"
+                        "model",
+                        "view"
                     ]
+                },
+                "views": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/node.View"
+                    }
+                }
+            }
+        },
+        "node.View": {
+            "type": "object",
+            "required": [
+                "children",
+                "data",
+                "schemaId"
+            ],
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/node.View"
+                    }
+                },
+                "data": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "schemaId": {
+                    "type": "string"
                 }
             }
         },
         "realm.Entity": {
             "type": "object",
+            "required": [
+                "authorId",
+                "id",
+                "name"
+            ],
             "properties": {
                 "authorId": {
                     "description": "Fist iteration, a realm belongs only to one user.",
@@ -1028,6 +1095,14 @@ var doc = `{
         },
         "schema.Entity": {
             "type": "object",
+            "required": [
+                "authorId",
+                "fields",
+                "id",
+                "name",
+                "realmId",
+                "type"
+            ],
             "properties": {
                 "authorId": {
                     "type": "string"
@@ -1051,7 +1126,8 @@ var doc = `{
                     "type": "string",
                     "enum": [
                         "scene",
-                        "nested"
+                        "model",
+                        "view"
                     ]
                 }
             }

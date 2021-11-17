@@ -24,12 +24,12 @@ func New(client *mongodb.Client) node.Repository {
 }
 
 type insertOneQuery struct {
-	RealmID  primitive.ObjectID `bson:"realmId"`
-	SchemaID primitive.ObjectID `bson:"schemaId"`
-	Type     node.Type          `json:"type"`
-	Slug     string             `json:"slug"`
-	Name     string             `json:"name"`
-	Data     interface{}        `json:"data"`
+	RealmID  primitive.ObjectID     `bson:"realmId"`
+	SchemaID primitive.ObjectID     `bson:"schemaId"`
+	Type     node.Type              `json:"type"`
+	Slug     string                 `json:"slug"`
+	Name     string                 `json:"name"`
+	Data     map[string]interface{} `json:"data"`
 }
 
 type patchOneQuery struct {

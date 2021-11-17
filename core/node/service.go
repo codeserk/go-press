@@ -6,12 +6,13 @@ type CreateParams struct {
 	Type     Type
 	Slug     string
 	Name     string
+	Data     *map[string]interface{}
 }
 
 type UpdateParams struct {
 	Slug *string
 	Name *string
-	Data *interface{}
+	Data *map[string]interface{}
 }
 
 type Service interface {

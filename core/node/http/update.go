@@ -14,9 +14,9 @@ import (
 )
 
 type updateNodeRequest struct {
-	Slug *string      `json:"slug"`
-	Name *string      `json:"name"`
-	Data *interface{} `json:"data"`
+	Slug *string                 `json:"slug"`
+	Name *string                 `json:"name"`
+	Data *map[string]interface{} `json:"data"`
 } // @name UpdateNodeRequest
 
 // @Tags Node

@@ -14,10 +14,11 @@ import (
 )
 
 type createNodeRequest struct {
-	SchemaID string    `json:"schemaId" validate:"required"`
-	Type     node.Type `json:"type" enums:"scene,nested" validate:"oneof=scene nested"`
-	Slug     string    `json:"slug" validate:"required"`
-	Name     string    `json:"name" validate:"required"`
+	SchemaID string                  `json:"schemaId" validate:"required"`
+	Type     node.Type               `json:"type" enums:"scene,model,view" validate:"oneof=scene model view"`
+	Slug     string                  `json:"slug" validate:"required"`
+	Name     string                  `json:"name" validate:"required"`
+	Data     *map[string]interface{} `json:"data"`
 } // @name CreateNodeRequest
 
 // @Tags Node
@@ -69,6 +70,7 @@ func create(s node.Service) http.Handler {
 			SchemaID: input.SchemaID,
 			Slug:     input.Slug,
 			Name:     input.Name,
+			Data:     input.Data,
 		})
 		if err != nil {
 			util.InternalError(w, err)
