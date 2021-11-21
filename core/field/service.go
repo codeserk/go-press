@@ -15,7 +15,7 @@ type UpdateParams struct {
 	Name        *string
 	Description *string
 	Primitive   *primitive.Type
-	Config      *interface{}
+	Config      *primitive.Config
 }
 
 type Service interface {

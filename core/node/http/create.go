@@ -14,11 +14,21 @@ import (
 )
 
 type createNodeRequest struct {
-	SchemaID string                  `json:"schemaId" validate:"required"`
-	Type     node.Type               `json:"type" enums:"scene,model,view" validate:"oneof=scene model view"`
-	Slug     string                  `json:"slug" validate:"required"`
-	Name     string                  `json:"name" validate:"required"`
-	Data     *map[string]interface{} `json:"data"`
+	// ID of the schema.
+	SchemaID string `json:"schemaId" validate:"required" example:"507f191e810c19729de860ea"`
+
+	// Type of node.
+	Type node.Type `json:"type" enums:"scene,model,view" validate:"oneof=scene model view"`
+
+	// Slug of the node, used to create URIs
+	Slug string `json:"slug" validate:"required" example:"how-to-write-better-go-code"`
+
+	// Name of the node.
+	Name string `json:"name" validate:"required" example:"How to write better go code"`
+
+	// Data for the node. The structure of the data depends on the schema, and
+	// it will be validated.
+	Data *map[string]interface{} `json:"data"`
 } // @name CreateNodeRequest
 
 // @Tags Node

@@ -12,11 +12,11 @@ func (r booleanResolver) DefaultConfig() interface{} {
 	}
 }
 
-func (r booleanResolver) TransformConfig(config interface{}) (interface{}, error) {
+func (r booleanResolver) TransformConfig(config Config) (Config, error) {
 	return config, nil
 }
 
-func (r booleanResolver) DefaultValue(config interface{}) (interface{}, error) {
+func (r booleanResolver) DefaultValue(config Config) (interface{}, error) {
 	value := false
 
 	return value, nil

@@ -1,7 +1,5 @@
 package primitive
 
-import "errors"
-
 type nodeConfig struct {
 	Required bool      `json:"required" bson:"required" default:"false" validate:"required"`
 	Min      *int8     `json:"min" bson:"max" validate:"number"`
@@ -20,23 +18,18 @@ func (r nodeResolver) DefaultConfig() interface{} {
 	}
 }
 
-func (r nodeResolver) TransformConfig(config interface{}) (interface{}, error) {
-	c, ok := config.(map[string]interface{})
-	if !ok {
-		return config, errors.New("invalid config")
-	}
-
-	schemas, exists := c["schemas"]
+func (r nodeResolver) TransformConfig(config Config) (Config, error) {
+	schemas, exists := config["schemas"]
 	if exists {
 		if a, ok := schemas.([]interface{}); ok && len(a) == 0 {
-			delete(c, "schemas")
+			delete(config, "schemas")
 		}
 	}
 
-	return c, nil
+	return config, nil
 }
 
-func (r nodeResolver) DefaultValue(config interface{}) (interface{}, error) {
+func (r nodeResolver) DefaultValue(config Config) (interface{}, error) {
 	value := ""
 
 	return value, nil

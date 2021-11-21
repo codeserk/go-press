@@ -21,11 +21,11 @@ func (r optionsResolver) DefaultConfig() interface{} {
 	}
 }
 
-func (r optionsResolver) TransformConfig(config interface{}) (interface{}, error) {
+func (r optionsResolver) TransformConfig(config Config) (Config, error) {
 	return config, nil
 }
 
-func (r optionsResolver) DefaultValue(config interface{}) (interface{}, error) {
+func (r optionsResolver) DefaultValue(config Config) (interface{}, error) {
 	value := ""
 
 	return value, nil

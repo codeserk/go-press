@@ -18,14 +18,24 @@ definitions:
     properties:
       data:
         additionalProperties: true
+        description: |-
+          Data for the node. The structure of the data depends on the schema, and
+          it will be validated.
         type: object
       name:
+        description: Name of the node.
+        example: How to write better go code
         type: string
       schemaId:
+        description: ID of the schema.
+        example: 507f191e810c19729de860ea
         type: string
       slug:
+        description: Slug of the node, used to create URIs
+        example: how-to-write-better-go-code
         type: string
       type:
+        description: Type of node.
         enum:
         - scene
         - model
@@ -98,7 +108,7 @@ definitions:
   UpdateFieldRequest:
     properties:
       config:
-        type: object
+        $ref: '#/definitions/primitive.Config'
       description:
         type: string
       key:
@@ -200,6 +210,9 @@ definitions:
     - children
     - data
     - schemaId
+    type: object
+  primitive.Config:
+    additionalProperties: true
     type: object
   realm.Entity:
     properties:

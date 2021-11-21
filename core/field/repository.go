@@ -15,7 +15,7 @@ type PatchOneParams struct {
 	Name        *string
 	Description *string
 	Primitive   *primitive.Type
-	Config      *interface{}
+	Config      *primitive.Config
 }
 
 type Repository interface {

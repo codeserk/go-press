@@ -15,11 +15,11 @@ import (
 )
 
 type updateFieldRequest struct {
-	Key         *string         `json:"key"`
-	Name        *string         `json:"name"`
-	Description *string         `json:"description"`
-	Primitive   *primitive.Type `json:"primitive"`
-	Config      *interface{}    `json:"config"`
+	Key         *string           `json:"key"`
+	Name        *string           `json:"name"`
+	Description *string           `json:"description"`
+	Primitive   *primitive.Type   `json:"primitive"`
+	Config      *primitive.Config `json:"config"`
 } // @name UpdateFieldRequest
 
 // @Tags Field

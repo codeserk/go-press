@@ -811,19 +811,27 @@ var doc = `{
             ],
             "properties": {
                 "data": {
+                    "description": "Data for the node. The structure of the data depends on the schema, and\nit will be validated.",
                     "type": "object",
                     "additionalProperties": true
                 },
                 "name": {
-                    "type": "string"
+                    "description": "Name of the node.",
+                    "type": "string",
+                    "example": "How to write better go code"
                 },
                 "schemaId": {
-                    "type": "string"
+                    "description": "ID of the schema.",
+                    "type": "string",
+                    "example": "507f191e810c19729de860ea"
                 },
                 "slug": {
-                    "type": "string"
+                    "description": "Slug of the node, used to create URIs",
+                    "type": "string",
+                    "example": "how-to-write-better-go-code"
                 },
                 "type": {
+                    "description": "Type of node.",
                     "type": "string",
                     "enum": [
                         "scene",
@@ -925,7 +933,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "config": {
-                    "type": "object"
+                    "$ref": "#/definitions/primitive.Config"
                 },
                 "description": {
                     "type": "string"
@@ -1072,6 +1080,10 @@ var doc = `{
                     "type": "string"
                 }
             }
+        },
+        "primitive.Config": {
+            "type": "object",
+            "additionalProperties": true
         },
         "realm.Entity": {
             "type": "object",

@@ -16,11 +16,11 @@ func (r textResolver) DefaultConfig() interface{} {
 	}
 }
 
-func (r textResolver) TransformConfig(config interface{}) (interface{}, error) {
+func (r textResolver) TransformConfig(config Config) (Config, error) {
 	return config, nil
 }
 
-func (r textResolver) DefaultValue(config interface{}) (interface{}, error) {
+func (r textResolver) DefaultValue(config Config) (interface{}, error) {
 	value := ""
 
 	return value, nil

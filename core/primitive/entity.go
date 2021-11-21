@@ -9,6 +9,7 @@ const (
 	Date    Type = "date"
 	Options Type = "options"
 	Node    Type = "node"
+	View    Type = "view"
 )
 
 type Entity struct {
@@ -16,10 +17,12 @@ type Entity struct {
 	Name string `json:"name" example:"Ryuk"`
 }
 
+type Config map[string]interface{}
+
 type Resolver interface {
 	DefaultConfig() interface{}
-	TransformConfig(config interface{}) (interface{}, error)
-	DefaultValue(config interface{}) (interface{}, error)
+	TransformConfig(config Config) (Config, error)
+	DefaultValue(config Config) (interface{}, error)
 	// ValidateConfig(config interface{}) error
 	// ValidateData(data interface{}) error
 }
@@ -38,6 +41,8 @@ func (t Type) Resolver() Resolver {
 		return options
 	case Node:
 		return node
+	case View:
+		return view
 	default:
 		return text
 	}
@@ -47,10 +52,10 @@ func (t Type) DefaultConfig() interface{} {
 	return t.Resolver().DefaultConfig()
 }
 
-func (t Type) TransformConfig(config interface{}) (interface{}, error) {
+func (t Type) TransformConfig(config Config) (Config, error) {
 	return t.Resolver().TransformConfig(config)
 }
 
-func (t Type) DefaultValue(config interface{}) (interface{}, error) {
+func (t Type) DefaultValue(config Config) (interface{}, error) {
 	return t.Resolver().DefaultValue(config)
 }

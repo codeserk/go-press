@@ -16,11 +16,11 @@ func (r numberResolver) DefaultConfig() interface{} {
 	}
 }
 
-func (r numberResolver) TransformConfig(config interface{}) (interface{}, error) {
+func (r numberResolver) TransformConfig(config Config) (Config, error) {
 	return config, nil
 }
 
-func (r numberResolver) DefaultValue(config interface{}) (interface{}, error) {
+func (r numberResolver) DefaultValue(config Config) (interface{}, error) {
 	value := 0
 
 	return value, nil
