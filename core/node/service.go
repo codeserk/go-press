@@ -20,4 +20,5 @@ type Service interface {
 	Update(id string, params UpdateParams) (*Entity, error)
 
 	GetInRealm(realmID string) ([]*Entity, error)
+	GetBySlug(realmID string, slug string) (*Entity, error)
 }

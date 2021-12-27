@@ -126,3 +126,22 @@ func (r *mongoRepository) FindInRealm(realmID string) ([]*node.Entity, error) {
 
 	return result, nil
 }
+
+func (r *mongoRepository) FindBySlug(realmID string, slug string) (*node.Entity, error) {
+	objectID, err := primitive.ObjectIDFromHex(realmID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid ObjectId '%s': %v", realmID, err)
+	}
+
+	var result node.Entity
+	err = mongo.Nodes.FindOne(ctx, bson.M{"realmId": objectID, "slug": slug}).Decode(&result)
+	if err != nil {
+		if err == mongodb.ErrNoDocuments {
+			fmt.Printf("noe slug is => %v", slug)
+			return nil, nil
+		}
+		return nil, fmt.Errorf("error found while tryign to retrieve the node by its slug `%s`: %v", slug, err)
+	}
+
+	return &result, nil
+}

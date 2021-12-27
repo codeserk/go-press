@@ -384,6 +384,61 @@ var doc = `{
                 }
             }
         },
+        "/v1/realm/{realmId}/scene": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Gets a Scene by its slug",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Node"
+                ],
+                "summary": "Gets a Scene by its slug",
+                "operationId": "get-scene",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Scene Slug",
+                        "name": "slug",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/node.Entity"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/realm/{realmId}/schema": {
             "get": {
                 "security": [

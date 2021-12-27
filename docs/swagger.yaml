@@ -507,6 +507,41 @@ paths:
       summary: Updates a node
       tags:
       - Node
+  /v1/realm/{realmId}/scene:
+    get:
+      consumes:
+      - application/json
+      description: Gets a Scene by its slug
+      operationId: get-scene
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      - description: Scene Slug
+        in: query
+        name: slug
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/node.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets a Scene by its slug
+      tags:
+      - Node
   /v1/realm/{realmId}/schema:
     get:
       consumes:

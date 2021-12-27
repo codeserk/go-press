@@ -20,4 +20,5 @@ type Repository interface {
 	PatchOne(id string, params PatchOneParams) (*Entity, error)
 
 	FindInRealm(realmID string) ([]*Entity, error)
+	FindBySlug(realmID string, slug string) (*Entity, error)
 }
