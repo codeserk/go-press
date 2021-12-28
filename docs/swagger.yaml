@@ -128,6 +128,16 @@ definitions:
       slug:
         type: string
     type: object
+  UpdateSchemaRequest:
+    properties:
+      name:
+        type: string
+      type:
+        enum:
+        - scene
+        - nested
+        type: string
+    type: object
   field.Entity:
     properties:
       config:
@@ -608,6 +618,78 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Creates a new schema
+      tags:
+      - Schema
+  /v1/realm/{realmId}/schema/{schemaId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a schema by its id
+      operationId: delete-schema
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      - description: Schema ID
+        in: path
+        name: schemaId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a schema by its id
+      tags:
+      - Schema
+    patch:
+      consumes:
+      - application/json
+      description: Updates a schema
+      operationId: update-schema
+      parameters:
+      - description: Realm ID
+        in: path
+        name: realmId
+        type: string
+      - description: Schema ID
+        in: path
+        name: schemaId
+        type: string
+      - description: Schema parameters
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/UpdateSchemaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates a schema
       tags:
       - Schema
   /v1/realm/{realmId}/schema/{schemaId}/field:

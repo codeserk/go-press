@@ -9,9 +9,15 @@ type CreateParams struct {
 	Name     string
 }
 
-type Service interface {
-	Create(params CreateParams) (*Entity, error)
+type UpdateParams struct {
+	Type node.Type
+	Name string
+}
 
+type Service interface {
 	GetByID(schemaID string) (*Entity, error)
 	GetInRealm(realmID string) ([]*Entity, error)
+	Create(params CreateParams) (*Entity, error)
+	Update(id string, params UpdateParams) (*Entity, error)
+	Delete(id string) error
 }

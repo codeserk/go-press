@@ -531,6 +531,119 @@
                 }
             }
         },
+        "/v1/realm/{realmId}/schema/{schemaId}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Deletes a schema by its id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schema"
+                ],
+                "summary": "Deletes a schema by its id",
+                "operationId": "delete-schema",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Schema ID",
+                        "name": "schemaId",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Updates a schema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schema"
+                ],
+                "summary": "Updates a schema",
+                "operationId": "update-schema",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Realm ID",
+                        "name": "realmId",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Schema ID",
+                        "name": "schemaId",
+                        "in": "path"
+                    },
+                    {
+                        "description": "Schema parameters",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateSchemaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.Entity"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/realm/{realmId}/schema/{schemaId}/field": {
             "get": {
                 "security": [
@@ -1001,6 +1114,21 @@
                 },
                 "slug": {
                     "type": "string"
+                }
+            }
+        },
+        "UpdateSchemaRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "scene",
+                        "nested"
+                    ]
                 }
             }
         },

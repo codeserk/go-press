@@ -1,4 +1,4 @@
-cd package primitive
+package primitive
 
 type viewConfig struct {
 	// Whether the field is required or not.
